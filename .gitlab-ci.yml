@@ -1,15 +1,16 @@
 image: golang:1.16-alpine3.14
 
 stages:
-    - test
     - build
+    - test
     - dockerize
     - deploy
 
-unit-test-job:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
   script:
-    - echo "Running unit tests..."
+    - echo "Compiling the code..."
+    - go build -o app ./cmd/main.go
 
 lint-test-job:
   image: golangci/golangci-lint:v1.41.1
@@ -21,10 +22,10 @@ lint-test-job:
   script:
     - golangci-lint run -c $LINT_CONFIG_PATH -v --timeout $LINT_TIMEOUT $EXTRA_PARAMETERS --fix
 
-build-job:       # This job runs in the build stage, which runs first.
-  stage: build
+unit-test-job:   # This job runs in the test stage.
+  stage: test    # It only starts when the job in the build stage completes successfully.
   script:
-    - echo "Compiling the code..."
+    - echo "Running unit tests..."
 
 dockerize-job:   # This job also runs in the test stage.
   stage: dockerize    # It can run at the same time as unit-test-job (in parallel).
