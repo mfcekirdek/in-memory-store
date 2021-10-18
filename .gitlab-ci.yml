@@ -8,6 +8,9 @@ stages:
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
+  before_script:
+    - go get -d ./...
+    - go mod tidy
   script:
     - echo "Compiling the code..."
     - go build -o app ./cmd/main.go
