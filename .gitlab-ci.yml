@@ -6,21 +6,34 @@ stages:
     - dockerize
     - deploy
 
-build-job:
-  stage: build
+.go-cache:
+  variables:
+    GOPATH: /go
   before_script:
-    - go get -d ./...
-    - go mod tidy
-  script:
-    - echo "Compiling the code..."
-    - go build -o app ./cmd/main.go
-    - cat go.sum
+    - apk add git
+    - mkdir -p /go/src/gitlab.com/mfcekirdek/in-memory-store /go/src/_/builds/mfcekirdek/in-memory-store
+    - cp -r $CI_PROJECT_DIR /go/src/gitlab.com/mfcekirdek/in-memory-store/app
+    - ln -s /go/src/gitlab.com/mfcekirdek/in-memory-store /go/src/_/builds/mfcekirdek/in-memory-store
+    - go mod download
+    - go get -u golang.org/x/lint/golint
   cache:
     paths:
       - /go/pkg/mod/
       - /go/golang.org
       - /go/google.golang.org
       - /go/gopkg.in
+
+
+build-job:
+  stage: build
+  extends: .cache
+#  before_script:
+#    - go get -d ./...
+#    - go mod tidy
+  script:
+    - echo "Compiling the code..."
+    - go build -o app ./cmd/main.go
+    - cat go.sum
   artifacts:
     paths:
       - app
@@ -28,6 +41,7 @@ build-job:
 lint-test-job:
   image: golangci/golangci-lint:v1.41.1
   stage: test
+  extends: .cache
   variables:
     LINT_TIMEOUT: 5m
     LINT_CONFIG_PATH: "configs/linter/.golangci.yml"
