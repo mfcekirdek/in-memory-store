@@ -31,7 +31,6 @@ build-job:
   script:
     - echo "Compiling the code..."
     - go build -o app ./cmd/main.go
-    - cat go.sum
   artifacts:
     paths:
       - app
@@ -45,13 +44,16 @@ lint-test-job:
     LINT_CONFIG_PATH: "configs/linter/.golangci.yml"
     EXTRA_PARAMETERS: ""
   script:
-    - golangci-lint version
     - golangci-lint run -c $LINT_CONFIG_PATH -v --timeout $LINT_TIMEOUT $EXTRA_PARAMETERS --fix
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
+  extends: .go-cache
   script:
-    - echo "Running unit tests..."
+    - CGO_ENABLED=0 go test -v ./... -coverprofile=unit_coverage.out -tags=unit
+  artifacts:
+    paths:
+      - ${CI_PROJECT_DIR}/unit_coverage.out
 
 dockerize-job:   # This job runs in the dockerize stage.
   stage: dockerize    # It only runs when *both* jobs in the test stage complete successfully.
