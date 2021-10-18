@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: kv-store
+  name: kv-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kv-store
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: kv-store
+    spec:
+      imagePullSecrets:
+      - name: gitlab-registry
+      containers:
+      - image: registry.gitlab.com/mfcekirdek/in-memory-store/main:latest
+        name: main
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+        resources: {}
+status: {}
