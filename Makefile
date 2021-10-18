@@ -14,3 +14,7 @@ test:
 tidy:
 	go get -d ./...
 	go mod tidy
+
+.PHONY: lint
+lint:
+	golangci-lint run -c configs/linter/.golangci.yml -v --fix

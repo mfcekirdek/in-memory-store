@@ -1,9 +1,10 @@
 package main
 
 import (
+	"log"
+
 	"gitlab.com/mfcekirdek/in-memory-store/configs"
 	"gitlab.com/mfcekirdek/in-memory-store/internals"
-	"log"
 )
 
 func main() {

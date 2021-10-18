@@ -12,9 +12,10 @@ type Config struct {
 }
 
 func NewConfig() *Config {
+	defaultPort := 8080 // added this variable to prevent 'magic number detected' lint error (gomnd)
 	viper.SetDefault("IS_DEBUG", true)
 	viper.SetDefault("APP_NAME", "kv-store")
-	viper.SetDefault("PORT", 8080)
+	viper.SetDefault("PORT", defaultPort)
 	viper.AutomaticEnv()
 
 	config := &Config{
