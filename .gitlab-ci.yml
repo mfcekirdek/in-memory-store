@@ -15,6 +15,15 @@ build-job:
     - echo "Compiling the code..."
     - go build -o app ./cmd/main.go
     - cat go.sum
+  cache:
+    paths:
+      - /go/pkg/mod/
+      - /go/golang.org
+      - /go/google.golang.org
+      - /go/gopkg.in
+  artifacts:
+    paths:
+      - app
 
 lint-test-job:
   image: golangci/golangci-lint:v1.41.1
