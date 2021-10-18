@@ -13,8 +13,8 @@ stages:
     - mkdir -p /go/src/gitlab.com/mfcekirdek/in-memory-store /go/src/_/builds/mfcekirdek/in-memory-store
     - cp -r $CI_PROJECT_DIR /go/src/gitlab.com/mfcekirdek/in-memory-store/app
     - ln -s /go/src/gitlab.com/mfcekirdek/in-memory-store /go/src/_/builds/mfcekirdek/in-memory-store
-    - go get -d ./...
-    - go mod tidy
+    - go mod download
+    - go get -u golang.org/x/lint/golint
   cache:
     paths:
       - /go/pkg/mod/
