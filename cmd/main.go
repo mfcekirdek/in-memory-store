@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"gitlab.com/mfcekirdek/in-memory-store/configs"
+)
 
 func main() {
-	fmt.Println("Hello world!")
+	config := configs.NewConfig()
+	config.Print()
 }
