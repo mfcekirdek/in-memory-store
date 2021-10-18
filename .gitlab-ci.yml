@@ -74,7 +74,17 @@ dockerize-job:   # This job runs in the dockerize stage.
       --destination $DOCKER_DESTINATION_LATEST
       --destination $DOCKER_DESTINATION_BRANCH
 
+
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only starts when the job in the dockerize stage completes successfully.
+  image:
+    name: lachlanevenson/k8s-kubectl:latest
+    entrypoint: ["/bin/sh", "-c"]
   script:
     - echo "Deploying application..."
+    - kubectl create secret -n "$KUBE_NAMESPACE" docker-registry gitlab-registry --docker-server="$CI_REGISTRY" --docker-username="$DEPLOY_TOKEN_USERNAME" --docker-password="$DEPLOY_TOKEN_PASSWORD" --docker-email="$GITLAB_USER_EMAIL" --dry-run=client -o yaml | kubectl replace -n "$KUBE_NAMESPACE" --force -f -
+    - kubectl delete pods -l app=todo-backend -n "$KUBE_NAMESPACE"
+    - kubectl apply -f deployments/deploy2k8s.yaml
+    - kubectl get pods
+  environment:
+    name: test
