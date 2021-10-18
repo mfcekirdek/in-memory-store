@@ -133,8 +133,6 @@ issues:
 run:
   build-tags:
     - unit
-    - couchbase
-    - pim_panel_bff_provider
   skip-dirs:
     - tilt_modules
 #     - test/testdata_etc

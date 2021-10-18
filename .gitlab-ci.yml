@@ -22,7 +22,6 @@ stages:
       - /go/google.golang.org
       - /go/gopkg.in
 
-
 build-job:
   stage: build
   extends: .go-cache
@@ -46,6 +45,7 @@ lint-test-job:
     LINT_CONFIG_PATH: "configs/linter/.golangci.yml"
     EXTRA_PARAMETERS: ""
   script:
+    - golangci-lint version
     - golangci-lint run -c $LINT_CONFIG_PATH -v --timeout $LINT_TIMEOUT $EXTRA_PARAMETERS --fix
 
 unit-test-job:   # This job runs in the test stage.
