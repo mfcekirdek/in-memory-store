@@ -1,3 +1,5 @@
+image: golang:1.16-alpine3.14
+
 stages:
     - test
     - build
@@ -9,10 +11,15 @@ unit-test-job:   # This job runs in the test stage.
   script:
     - echo "Running unit tests..."
 
-lint-test-job:   # This job also runs in the test stage.
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
+lint-test-job:
+  image: golangci/golangci-lint:v1.41.1
+  stage: test
+  variables:
+    LINT_TIMEOUT: 5m
+    LINT_CONFIG_PATH: "configs/linter/.golangci.yml"
+    EXTRA_PARAMETERS: ""
   script:
-    - echo "Linting code..."
+    - golangci-lint run -c $LINT_CONFIG_PATH -v --timeout $LINT_TIMEOUT $EXTRA_PARAMETERS --fix
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
