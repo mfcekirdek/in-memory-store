@@ -18,3 +18,7 @@ tidy:
 .PHONY: lint
 lint:
 	golangci-lint run -c configs/linter/.golangci.yml -v --fix
+
+.PHONY: build-docker-image
+build-docker-image:
+	docker build -t registry.gitlab.com/mfcekirdek/kv-store:latest -f deployments/Dockerfile .
