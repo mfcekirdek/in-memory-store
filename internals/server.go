@@ -37,8 +37,8 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) Routes() {
-	storeRepository := repository.NewStoreRepository(s.config.StorageDirPath, s.config.FlushInterval)
-	storeService := service.NewStoreService(storeRepository)
+	storeRepository := repository.NewStoreRepository(s.config.StorageDirPath)
+	storeService := service.NewStoreService(storeRepository, s.config.FlushInterval)
 	storeHandler := handler.NewStoreHandler(storeService)
 	s.mux.HandleFunc("/health", checkHealth)
 	s.mux.HandleFunc("/api/v1/store", storeHandler.Flush)

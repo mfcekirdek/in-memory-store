@@ -19,12 +19,11 @@ type StoreRepository interface {
 
 type storeRepository struct {
 	storageDirPath string
-	flushInterval  int
 	store          map[string]string
 }
 
-func NewStoreRepository(path string, flushInterval int) StoreRepository {
-	repository := &storeRepository{storageDirPath: path, flushInterval: flushInterval}
+func NewStoreRepository(path string) StoreRepository {
+	repository := &storeRepository{storageDirPath: path}
 	repository.store = repository.loadStoreDataFromFile(path)
 	return repository
 }
