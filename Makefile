@@ -8,7 +8,12 @@ run:
 
 .PHONY: test
 test:
-	go test ./... -v
+	go test ./... -v -coverprofile=unit_coverage.out -tags=unit
+
+.PHONY: unit-coverage-html
+unit-coverage-html:
+	make test
+	go tool cover -html=unit_coverage.out -o unit_coverage.html
 
 .PHONY: tidy
 tidy:
