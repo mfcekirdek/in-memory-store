@@ -14,11 +14,11 @@ type StoreHandler interface {
 }
 
 type storeHandler struct {
-	service *service.StoreService
+	service service.StoreService
 }
 
 func NewStoreHandler(svc service.StoreService) StoreHandler {
-	handler := &storeHandler{service: &svc}
+	handler := &storeHandler{service: svc}
 	return handler
 }
 
@@ -32,9 +32,14 @@ func (s *storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case http.MethodGet:
-		return
+		if result, err := s.service.Get("a"); err != nil {
+			utils.HandleError(w, r, http.StatusNotFound)
+		} else {
+			utils.ReturnJSONResponse(w, r, result)
+		}
 	case http.MethodPut:
-		return
+		result := s.service.Set("a", "x")
+		utils.ReturnJSONResponse(w, r, result)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		utils.ReturnJSONResponse(w, r, "Method Not Allowed")

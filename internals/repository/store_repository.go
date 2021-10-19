@@ -7,16 +7,30 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
 type StoreRepository interface {
+	Get(key string) string
+	Set(key string, value string)
 }
 
 type storeRepository struct {
 	storageDirPath string
 	flushInterval  int
 	store          map[string]string
+}
+
+func (s *storeRepository) Get(key string) string {
+	if value, ok := s.store[key]; ok {
+		return value
+	}
+	return ""
+}
+
+func (s *storeRepository) Set(key string, value string) {
+	s.store[key] = value
 }
 
 func NewStoreRepository(path string, flushInterval int) StoreRepository {
@@ -63,12 +77,20 @@ func loadJSONFileToMap(jsonFilePath string) map[string]string {
 
 func findJSONFilePath(dirPath string, files []fs.FileInfo) string {
 	suffix := "-data.json"
+	SortFileNameDescend(files)
 	for _, file := range files {
 		if strings.Contains(file.Name(), suffix) {
 			filePath := filepath.Join(dirPath, file.Name())
+			log.Println(file.Name(), file.Size())
 			return filePath
 		}
 	}
 	log.Println("Json file not found on the given path..")
 	return ""
+}
+
+func SortFileNameDescend(files []os.FileInfo) {
+	sort.Slice(files, func(i, j int) bool {
+		return files[i].Name() > files[j].Name()
+	})
 }
