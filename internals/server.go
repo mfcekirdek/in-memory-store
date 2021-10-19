@@ -28,7 +28,13 @@ func NewServer(c *configs.Config) *Server {
 
 func (s *Server) Start() error {
 	addr := fmt.Sprintf(":%d", s.config.Server.Port)
-	s.Routes()
+	store := repository.LoadStoreDataFromFile("")
+	storeRepository := repository.NewStoreRepository(store)
+	storeService := service.NewStoreService(storeRepository)
+	storeHandler := handler.NewStoreHandler(storeService)
+	s.mux.HandleFunc("/health", checkHealth)
+	s.mux.HandleFunc("/api/v1/store", storeHandler.Flush)
+	s.mux.Handle("/api/v1/store/", storeHandler)
 
 	wrappedMux := middleware.NewHeaderMiddleware(s.mux)
 	if s.config.IsDebug {
@@ -36,14 +42,6 @@ func (s *Server) Start() error {
 		return http.ListenAndServe(addr, wrappedMux)
 	}
 	return http.ListenAndServe(addr, wrappedMux)
-}
-
-func (s *Server) Routes() {
-	storeRepository := repository.NewStoreRepository()
-	storeService := service.NewStoreService(storeRepository)
-	storeHandler := handler.NewStoreHandler(storeService)
-	s.mux.HandleFunc("/health", checkHealth)
-	s.mux.Handle("/api/v1/store/", storeHandler)
 }
 
 func checkHealth(w http.ResponseWriter, r *http.Request) {

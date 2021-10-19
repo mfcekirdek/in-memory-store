@@ -10,6 +10,7 @@ import (
 
 type StoreHandler interface {
 	ServeHTTP(w http.ResponseWriter, r *http.Request)
+	Flush(w http.ResponseWriter, r *http.Request)
 }
 
 type storeHandler struct {
@@ -21,7 +22,7 @@ func NewStoreHandler(svc service.StoreService) StoreHandler {
 	return handler
 }
 
-func (s storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (s *storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Path[len("/api/v1/store/"):]
 
 	if id == "" {
@@ -33,6 +34,18 @@ func (s storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		return
 	case http.MethodPut:
+		return
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		utils.ReturnJSONResponse(w, r, "Method Not Allowed")
+		return
+	}
+}
+
+func (s *storeHandler) Flush(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodDelete:
+		w.WriteHeader(http.StatusOK)
 		return
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
