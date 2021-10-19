@@ -13,6 +13,8 @@ func HandleError(w http.ResponseWriter, r *http.Request, status int) {
 		resp, _ = json.Marshal("Not found")
 	} else if status == http.StatusBadRequest {
 		resp, _ = json.Marshal("custom 400")
+	} else if status == http.StatusMethodNotAllowed {
+		resp, _ = json.Marshal("Method Not Allowed")
 	}
 
 	if _, err := w.Write(resp); err != nil {

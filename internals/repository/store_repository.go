@@ -14,12 +14,23 @@ import (
 type StoreRepository interface {
 	Get(key string) string
 	Set(key string, value string)
+	Flush()
 }
 
 type storeRepository struct {
 	storageDirPath string
 	flushInterval  int
 	store          map[string]string
+}
+
+func NewStoreRepository(path string, flushInterval int) StoreRepository {
+	repository := &storeRepository{storageDirPath: path, flushInterval: flushInterval}
+	repository.store = repository.loadStoreDataFromFile(path)
+	return repository
+}
+
+func (s *storeRepository) Flush() {
+	s.store = map[string]string{}
 }
 
 func (s *storeRepository) Get(key string) string {
@@ -31,12 +42,6 @@ func (s *storeRepository) Get(key string) string {
 
 func (s *storeRepository) Set(key string, value string) {
 	s.store[key] = value
-}
-
-func NewStoreRepository(path string, flushInterval int) StoreRepository {
-	repository := &storeRepository{storageDirPath: path, flushInterval: flushInterval}
-	repository.store = repository.loadStoreDataFromFile(path)
-	return repository
 }
 
 func (s *storeRepository) loadStoreDataFromFile(path string) map[string]string {
