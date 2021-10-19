@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"gitlab.com/mfcekirdek/in-memory-store/internals/repository"
+	"gitlab.com/mfcekirdek/in-memory-store/internals/service"
+
 	"gitlab.com/mfcekirdek/in-memory-store/configs"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/handler"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/middleware"
@@ -36,12 +39,13 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) Routes() {
-	storeHandler := handler.NewStoreHandler()
+	storeRepository := repository.NewStoreRepository()
+	storeService := service.NewStoreService(storeRepository)
+	storeHandler := handler.NewStoreHandler(storeService)
 	s.mux.HandleFunc("/health", checkHealth)
 	s.mux.Handle("/api/v1/store/", storeHandler)
 }
 
 func checkHealth(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	utils.ReturnJSONResponse(w, r, map[string]string{"status": "OK"})
 }

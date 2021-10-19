@@ -3,6 +3,8 @@ package handler
 import (
 	"net/http"
 
+	"gitlab.com/mfcekirdek/in-memory-store/internals/service"
+
 	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
 )
 
@@ -11,10 +13,11 @@ type StoreHandler interface {
 }
 
 type storeHandler struct {
+	service *service.StoreService
 }
 
-func NewStoreHandler() StoreHandler {
-	handler := &storeHandler{}
+func NewStoreHandler(svc service.StoreService) StoreHandler {
+	handler := &storeHandler{service: &svc}
 	return handler
 }
 
