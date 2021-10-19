@@ -67,7 +67,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/KeyValuePair'
         "400":
-          description: invalid input, object invalid
+          description: bad input parameter
 components:
   schemas:
     KeyValuePair:

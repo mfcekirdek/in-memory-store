@@ -2,45 +2,45 @@ package internals
 
 import (
 	"fmt"
-	"net/http"
-	"time"
-
-	echo "github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"github.com/tylerb/graceful"
 	"gitlab.com/mfcekirdek/in-memory-store/configs"
+	"gitlab.com/mfcekirdek/in-memory-store/internals/handler"
+	"gitlab.com/mfcekirdek/in-memory-store/internals/middleware"
+	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
+	"net/http"
 )
 
 type Server struct {
-	e      *echo.Echo
+	mux    *http.ServeMux
 	config *configs.Config
 }
 
 func NewServer(c *configs.Config) *Server {
-	e := echo.New()
-	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
-	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
-		Level: 5,
-	}))
-	if c.IsDebug {
-		e.Use(middleware.Logger())
-	}
-
 	server := &Server{
-		e:      e,
+		mux:    http.NewServeMux(),
 		config: c,
 	}
 	return server
 }
 
-func checkHealth(ctx echo.Context) error {
-	return ctx.JSON(http.StatusOK, "OK")
+func (s *Server) Start() error {
+	addr := fmt.Sprintf(":%d", s.config.Server.Port)
+	s.Routes()
+
+	wrappedMux := middleware.NewHeaderMiddleware(s.mux)
+	if s.config.IsDebug {
+		wrappedMux := middleware.NewLoggerMiddleware(wrappedMux)
+		return http.ListenAndServe(addr, wrappedMux)
+	}
+	return http.ListenAndServe(addr, wrappedMux)
 }
 
-func (s *Server) Start() error {
-	s.e.Server.Addr = fmt.Sprintf(":%d", s.config.Server.Port)
-	s.e.GET("/health", checkHealth)
-	timeout := time.Second * 10
-	return graceful.ListenAndServe(s.e.Server, timeout)
+func (s *Server) Routes() {
+	storeHandler := handler.NewStoreHandler()
+	s.mux.HandleFunc("/health", checkHealth)
+	s.mux.Handle("/api/v1/store/", storeHandler)
+}
+
+func checkHealth(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	utils.ReturnJSONResponse(w, r, map[string]string{"status": "OK"})
 }
