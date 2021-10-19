@@ -1,8 +1,9 @@
 package handler
 
 import (
-	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
 	"net/http"
+
+	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
 )
 
 type StoreHandler interface {

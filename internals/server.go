@@ -2,11 +2,12 @@ package internals
 
 import (
 	"fmt"
+	"net/http"
+
 	"gitlab.com/mfcekirdek/in-memory-store/configs"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/handler"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/middleware"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
-	"net/http"
 )
 
 type Server struct {
