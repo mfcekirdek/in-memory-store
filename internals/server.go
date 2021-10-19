@@ -2,13 +2,12 @@ package internals
 
 import (
 	"fmt"
-	"net/http"
-
+	"gitlab.com/mfcekirdek/in-memory-store/internals/handler"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/repository"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/service"
+	"net/http"
 
 	"gitlab.com/mfcekirdek/in-memory-store/configs"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/handler"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/middleware"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
 )
@@ -28,20 +27,22 @@ func NewServer(c *configs.Config) *Server {
 
 func (s *Server) Start() error {
 	addr := fmt.Sprintf(":%d", s.config.Server.Port)
-	store := repository.LoadStoreDataFromFile("")
-	storeRepository := repository.NewStoreRepository(store)
-	storeService := service.NewStoreService(storeRepository)
-	storeHandler := handler.NewStoreHandler(storeService)
-	s.mux.HandleFunc("/health", checkHealth)
-	s.mux.HandleFunc("/api/v1/store", storeHandler.Flush)
-	s.mux.Handle("/api/v1/store/", storeHandler)
-
+	s.Routes()
 	wrappedMux := middleware.NewHeaderMiddleware(s.mux)
 	if s.config.IsDebug {
 		wrappedMux := middleware.NewLoggerMiddleware(wrappedMux)
 		return http.ListenAndServe(addr, wrappedMux)
 	}
 	return http.ListenAndServe(addr, wrappedMux)
+}
+
+func (s *Server) Routes() {
+	storeRepository := repository.NewStoreRepository(s.config.StorageDirPath, s.config.FlushInterval)
+	storeService := service.NewStoreService(storeRepository)
+	storeHandler := handler.NewStoreHandler(storeService)
+	s.mux.HandleFunc("/health", checkHealth)
+	s.mux.HandleFunc("/api/v1/store", storeHandler.Flush)
+	s.mux.Handle("/api/v1/store/", storeHandler)
 }
 
 func checkHealth(w http.ResponseWriter, r *http.Request) {
