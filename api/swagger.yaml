@@ -38,7 +38,7 @@ paths:
         "400":
           description: bad input parameter
         "404":
-          description: Not found
+          description: not found
     put:
       tags:
         - store
@@ -68,8 +68,6 @@ paths:
                 $ref: '#/components/schemas/KeyValuePair'
         "400":
           description: invalid input, object invalid
-        "404":
-          description: Not found
 components:
   schemas:
     KeyValuePair:
