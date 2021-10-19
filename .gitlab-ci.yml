@@ -3,7 +3,7 @@ image: golang:1.16-alpine3.14
 stages:
     - build
     - test
-    - code-analysis
+#    - code-analysis
     - dockerize
     - deploy
 
@@ -53,7 +53,7 @@ unit-test-job:
     paths:
       - ${CI_PROJECT_DIR}/unit_coverage.out
 
-sonarqube:
+.sonarqube:
   stage: code-analysis
   image:
     name: sonarsource/sonar-scanner-cli:latest
