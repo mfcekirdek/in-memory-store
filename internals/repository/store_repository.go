@@ -14,7 +14,7 @@ import (
 type StoreRepository interface {
 	Get(key string) string
 	Set(key string, value string)
-	Flush()
+	Flush() map[string]string
 }
 
 type storeRepository struct {
@@ -29,8 +29,9 @@ func NewStoreRepository(path string, flushInterval int) StoreRepository {
 	return repository
 }
 
-func (s *storeRepository) Flush() {
+func (s *storeRepository) Flush() map[string]string {
 	s.store = map[string]string{}
+	return s.store
 }
 
 func (s *storeRepository) Get(key string) string {

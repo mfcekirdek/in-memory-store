@@ -25,12 +25,12 @@ func NewStoreHandler(svc service.StoreService) StoreHandler {
 func (s *storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	key := r.URL.Path[len("/api/v1/store/"):]
 
-	if key == "" {
-		utils.HandleError(w, r, http.StatusBadRequest)
-		return
-	}
 	switch r.Method {
 	case http.MethodGet:
+		if key == "" {
+			utils.HandleError(w, r, http.StatusBadRequest)
+			return
+		}
 		if result, err := s.service.Get(key); err != nil {
 			utils.HandleError(w, r, http.StatusNotFound)
 		} else {
@@ -38,6 +38,10 @@ func (s *storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			utils.ReturnJSONResponse(w, r, result)
 		}
 	case http.MethodPut:
+		if key == "" {
+			utils.HandleError(w, r, http.StatusBadRequest)
+			return
+		}
 		w.WriteHeader(http.StatusOK)
 		result := s.service.Set(key, "x")
 		utils.ReturnJSONResponse(w, r, result)
@@ -50,7 +54,8 @@ func (s *storeHandler) Flush(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodDelete:
 		w.WriteHeader(http.StatusOK)
-		s.service.Flush()
+		result := s.service.Flush()
+		utils.ReturnJSONResponse(w, r, result)
 		return
 	default:
 		utils.HandleError(w, r, http.StatusMethodNotAllowed)

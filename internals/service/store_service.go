@@ -8,7 +8,7 @@ import (
 type StoreService interface {
 	Get(key string) (map[string]string, error)
 	Set(key string, value string) map[string]string
-	Flush()
+	Flush() map[string]string
 }
 
 type storeService struct {
@@ -33,6 +33,6 @@ func (s *storeService) Set(key string, value string) map[string]string {
 	return map[string]string{key: value}
 }
 
-func (s *storeService) Flush() {
-	s.repository.Flush()
+func (s *storeService) Flush() map[string]string {
+	return s.repository.Flush()
 }
