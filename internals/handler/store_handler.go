@@ -50,10 +50,9 @@ func (s *storeHandler) Flush(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodDelete:
 		w.WriteHeader(http.StatusOK)
+		s.service.Flush()
 		return
 	default:
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		utils.ReturnJSONResponse(w, r, "Method Not Allowed")
-		return
+		utils.HandleError(w, r, http.StatusMethodNotAllowed)
 	}
 }
