@@ -62,9 +62,6 @@ sonarqube:
     SONAR_HOST_URL: "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
   script:
     - ls
-    - echo $SONAR_HOST_URL
-    - wget $SONAR_HOST_URL
-    - cat index.html
     - sonar-scanner -Dsonar.login=$SONARQUBE_TOKEN
 
 dockerize-job:
