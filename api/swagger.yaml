@@ -65,7 +65,7 @@ paths:
                     type: string
                     example: item fetched
         "400":
-          description: bad input parameter
+          description: bad input parameter/body
           content:
             application/json:
               schema:
@@ -75,7 +75,7 @@ paths:
                     example: null
                   description:
                     type: string
-                    example: bad input parameter
+                    example: bad input parameter/body
         "404":
           description: not found
           content:
