@@ -43,7 +43,7 @@ func (s *storeService) Flush() map[string]string {
 }
 
 func (s *storeService) BackgroundTask(interval int, task func() []byte) {
-	dateTicker := time.NewTicker(time.Duration(interval) * time.Second)
+	dateTicker := time.NewTicker(time.Duration(interval) * time.Minute)
 	for x := range dateTicker.C {
 		fmt.Println(x)
 		response := task()
@@ -52,7 +52,8 @@ func (s *storeService) BackgroundTask(interval int, task func() []byte) {
 }
 
 func saveToJSONFile() []byte {
-	log.Println("Saving to file..")
+	timestamp := time.Now().Unix()
+	log.Println("Saving to file..", timestamp)
 	out, err := exec.Command("date").Output()
 	if err != nil {
 		log.Fatal(err)

@@ -8,8 +8,11 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 )
+
+const JsonFileSuffix = "-data.json"
 
 type StoreRepository interface {
 	Get(key string) string
@@ -80,22 +83,38 @@ func loadJSONFileToMap(jsonFilePath string) map[string]string {
 	return store
 }
 
-func findJSONFilePath(dirPath string, files []fs.FileInfo) string {
-	suffix := "-data.json"
-	SortFileNameDescend(files)
-	for _, file := range files {
-		if strings.Contains(file.Name(), suffix) {
-			filePath := filepath.Join(dirPath, file.Name())
-			log.Println(file.Name(), file.Size())
-			return filePath
-		}
+func findJSONFilePath(dir string, files []fs.FileInfo) string {
+	storeFiles := filterValidDataFiles(files)
+	SortTimestampDescend(storeFiles)
+
+	if len(storeFiles) > 0 {
+		return filepath.Join(dir, storeFiles[0].Name())
 	}
-	log.Println("Json file not found on the given path..")
 	return ""
 }
 
-func SortFileNameDescend(files []os.FileInfo) {
+func SortTimestampDescend(files []os.FileInfo) {
 	sort.Slice(files, func(i, j int) bool {
-		return files[i].Name() > files[j].Name()
+		l1, _ := strconv.Atoi(getTimestampFromFilename(files[i].Name()))
+		l2, _ := strconv.Atoi(getTimestampFromFilename(files[j].Name()))
+		return l1 > l2
 	})
+}
+
+func getTimestampFromFilename(filename string) string {
+	timestamp := filename[:len(filename)-len(JsonFileSuffix)]
+	return timestamp
+}
+
+func filterValidDataFiles(files []os.FileInfo) []os.FileInfo {
+	result := make([]os.FileInfo, 0)
+	for _, file := range files {
+		if strings.Contains(file.Name(), JsonFileSuffix) {
+			timestamp := getTimestampFromFilename(file.Name())
+			if _, err := strconv.Atoi(timestamp); err == nil {
+				result = append(result, file)
+			}
+		}
+	}
+	return result
 }
