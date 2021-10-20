@@ -3,7 +3,7 @@ image: golang:1.16-alpine3.14
 stages:
     - build
     - test
-    - code-analysis
+    # - code-analysis
     - dockerize
     - deploy
 
@@ -53,16 +53,16 @@ unit-test-job:
     paths:
       - ${CI_PROJECT_DIR}/unit_coverage.out
 
-sonarqube:
-  stage: code-analysis
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [ "" ]
-  variables:
-    SONAR_HOST_URL: "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
-  script:
-    - ls
-    - sonar-scanner -Dsonar.login=$SONARQUBE_TOKEN
+#sonarqube:
+#  stage: code-analysis
+#  image:
+#    name: sonarsource/sonar-scanner-cli:latest
+#    entrypoint: [ "" ]
+#  variables:
+#    SONAR_HOST_URL: "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
+#  script:
+#    - ls
+#    - sonar-scanner -Dsonar.login=$SONARQUBE_TOKEN
 
 dockerize-job:
   stage: dockerize
@@ -85,7 +85,6 @@ dockerize-job:
       --destination $DOCKER_DESTINATION
       --destination $DOCKER_DESTINATION_LATEST
       --destination $DOCKER_DESTINATION_BRANCH
-
 
 deploy-job:
   stage: deploy
