@@ -34,11 +34,40 @@ paths:
             type: string
       responses:
         "200":
-          description: key/value pair
+          description: item fetched
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: '#/components/schemas/KeyValuePair'
+                  description:
+                    type: string
+                    example: item fetched
         "400":
           description: bad input parameter
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    example: null
+                  description:
+                    type: string
+                    example: bad input parameter
         "404":
           description: not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    example: null
+                  description:
+                    type: string
+                    example: not found
     put:
       tags:
         - store
@@ -58,21 +87,71 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/KeyValuePair'
+              $ref: '#/components/schemas/Value'
       responses:
         "200":
           description: item updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/KeyValuePair'
+                properties:
+                  data:
+                    $ref: '#/components/schemas/KeyValuePair'
+                  description:
+                    type: string
+                    example: item updated
+        "201":
+          description: item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
         "400":
-          description: bad input parameter
+          description: bad input parameter/body
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    example: null
+                  description:
+                    type: string
+                    example: bad input parameter/body
+        "404":
+          description: not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    example: null
+                  description:
+                    type: string
+                    example: not found
 components:
   schemas:
     KeyValuePair:
       properties:
         key:
           type: string
-          example: value
+          example: foo
+        value:
+          type: string
+          example: bar
       description: Key Value Pair
+    Value:
+      properties:
+        value:
+          type: string
+          example: bar
+      description: Value
+    BaseResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/KeyValuePair'
+        description:
+          type: string
+          example: item created
+      description: Value
