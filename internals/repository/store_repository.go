@@ -1,7 +1,5 @@
 package repository
 
-const JSONFileSuffix = "-data.json"
-
 type StoreRepository interface {
 	Get(key string) string
 	Set(key string, value string) bool
@@ -39,7 +37,7 @@ func (s *storeRepository) Get(key string) string {
 	return ""
 }
 
-func (s *storeRepository) Set(key string, value string) bool {
+func (s *storeRepository) Set(key, value string) bool {
 	keyAlreadyExists := false
 	if s.store[key] != "" {
 		keyAlreadyExists = true
