@@ -2,29 +2,37 @@ package utils
 
 import (
 	"encoding/json"
+	"gitlab.com/mfcekirdek/in-memory-store/internals/model"
 	"log"
 	"net/http"
 )
 
 func HandleError(w http.ResponseWriter, r *http.Request, status int) {
-	w.WriteHeader(status)
-	var resp []byte
+	var response *model.BaseResponse
 	if status == http.StatusNotFound {
-		resp, _ = json.Marshal("Not found")
+		response = GenerateResponse(nil, "Not found")
 	} else if status == http.StatusBadRequest {
-		resp, _ = json.Marshal("custom 400")
+		response = GenerateResponse(nil, "Bad Request")
 	} else if status == http.StatusMethodNotAllowed {
-		resp, _ = json.Marshal("Method Not Allowed")
+		response = GenerateResponse(nil, "Method Not Allowed")
 	}
 
+	resp, err := json.Marshal(response)
+	if err != nil {
+		log.Printf("Err: %s\n", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(status)
 	if _, err := w.Write(resp); err != nil {
 		log.Printf("Err: %s\n", err.Error())
-		return
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
 
 func ReturnJSONResponse(w http.ResponseWriter, r *http.Request, result interface{}) {
-	resp, err := json.Marshal(result)
+	response := GenerateResponse(result, "")
+	resp, err := json.Marshal(response)
 	if err != nil {
 		log.Printf("Error happened in JSON marshal. Err: %s\n", err.Error())
 		HandleError(w, r, http.StatusInternalServerError)
@@ -32,6 +40,14 @@ func ReturnJSONResponse(w http.ResponseWriter, r *http.Request, result interface
 	}
 	if _, err := w.Write(resp); err != nil {
 		log.Printf("Err: %s\n", err.Error())
-		return
+		HandleError(w, r, http.StatusInternalServerError)
 	}
+}
+
+func GenerateResponse(data interface{}, description string) *model.BaseResponse {
+	response := model.BaseResponse{
+		Data:        data,
+		Description: description,
+	}
+	return &response
 }
