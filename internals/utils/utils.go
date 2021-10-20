@@ -2,9 +2,10 @@ package utils
 
 import (
 	"encoding/json"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/model"
 	"log"
 	"net/http"
+
+	"gitlab.com/mfcekirdek/in-memory-store/internals/model"
 )
 
 func HandleError(w http.ResponseWriter, r *http.Request, status int) {

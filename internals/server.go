@@ -2,10 +2,11 @@ package internals
 
 import (
 	"fmt"
+	"net/http"
+
 	"gitlab.com/mfcekirdek/in-memory-store/internals/handler"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/repository"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/service"
-	"net/http"
 
 	"gitlab.com/mfcekirdek/in-memory-store/configs"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/middleware"

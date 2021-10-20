@@ -3,8 +3,6 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/repository"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
 	"io/fs"
 	"io/ioutil"
 	"log"
@@ -14,6 +12,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"gitlab.com/mfcekirdek/in-memory-store/internals/repository"
+	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
 )
 
 const JSONFileSuffix = "-data.json"
@@ -67,21 +68,6 @@ func (s *storeService) BackgroundTask(interval int, task func(filepath string, s
 	}
 }
 
-func saveToJSONFile(filePath string, store map[string]string) error {
-	log.Println("Saving store to file -> ", filePath)
-	file, err := json.MarshalIndent(store, "", " ")
-	if err != nil {
-		return err
-	}
-	err = ioutil.WriteFile(filePath, file, 0600)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-// todo Repository'i biraz incelt, service'e taşı logicleri
-
 func (s *storeService) loadStoreDataFromFile(path string) map[string]string {
 	if err := os.MkdirAll(path, os.ModePerm); err != nil {
 		log.Println("Could not create storage directory", err)
@@ -98,6 +84,20 @@ func (s *storeService) loadStoreDataFromFile(path string) map[string]string {
 	store := loadJSONFileToMap(jsonFilePath)
 
 	return store
+}
+
+func saveToJSONFile(filePath string, store map[string]string) error {
+	log.Println("Saving store to file -> ", filePath)
+	file, err := json.MarshalIndent(store, "", " ")
+	if err != nil {
+		return err
+	}
+	var perm fs.FileMode = 0600
+	err = ioutil.WriteFile(filePath, file, perm)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func loadJSONFileToMap(jsonFilePath string) map[string]string {
@@ -120,7 +120,7 @@ func loadJSONFileToMap(jsonFilePath string) map[string]string {
 
 func findJSONFilePath(dir string, files []fs.FileInfo) string {
 	storeFiles := filterValidDataFiles(files)
-	SortTimestampDescend(storeFiles)
+	sortTimestampDescend(storeFiles)
 
 	if len(storeFiles) > 0 {
 		return filepath.Join(dir, storeFiles[0].Name())
@@ -128,7 +128,7 @@ func findJSONFilePath(dir string, files []fs.FileInfo) string {
 	return ""
 }
 
-func SortTimestampDescend(files []os.FileInfo) {
+func sortTimestampDescend(files []os.FileInfo) {
 	sort.Slice(files, func(i, j int) bool {
 		l1, _ := strconv.Atoi(getTimestampFromFilename(files[i].Name()))
 		l2, _ := strconv.Atoi(getTimestampFromFilename(files[j].Name()))
