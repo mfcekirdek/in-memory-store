@@ -14,7 +14,7 @@ type Config struct {
 }
 
 func NewConfig() *Config {
-	flushInterval := 3  // in minutes // added this variable to prevent 'magic number detected' lint error (gomnd)
+	flushInterval := 10 // in minutes // added this variable to prevent 'magic number detected' lint error (gomnd)
 	defaultPort := 8080 // added this variable to prevent 'magic number detected' lint error (gomnd)
 	viper.SetDefault("IS_DEBUG", true)
 	viper.SetDefault("APP_NAME", "kv-store")

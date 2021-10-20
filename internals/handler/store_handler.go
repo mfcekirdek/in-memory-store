@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"encoding/json"
+	"io"
 	"net/http"
 
 	"gitlab.com/mfcekirdek/in-memory-store/internals/service"
@@ -42,8 +44,21 @@ func (s *storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			utils.HandleError(w, r, http.StatusBadRequest)
 			return
 		}
+		store := map[string]string{}
+		body, _ := io.ReadAll(r.Body)
+		err := json.Unmarshal(body, &store)
+		if err != nil {
+			utils.HandleError(w, r, http.StatusBadRequest)
+			return
+		}
+
+		if store["value"] == "" {
+			utils.HandleError(w, r, http.StatusBadRequest)
+			return
+		}
+
+		result := s.service.Set(key, store["value"])
 		w.WriteHeader(http.StatusOK)
-		result := s.service.Set(key, "x")
 		utils.ReturnJSONResponse(w, r, result)
 	default:
 		utils.HandleError(w, r, http.StatusMethodNotAllowed)
