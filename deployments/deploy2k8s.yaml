@@ -25,6 +25,17 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        env:
+          - name: APP_NAME
+            value: "kv-store"
+          - name: IS_DEBUG
+            value: true
+          - name: STORAGE_DIR_PATH
+            value: "storage"
+          - name: FLUSH_INTERVAL
+            value: 2
+          - name: PORT
+            value: 8080
         resources: {}
 status: {}
 
