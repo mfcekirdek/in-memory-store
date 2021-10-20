@@ -16,6 +16,26 @@ tags:
   - name: store
     description: Access to store
 paths:
+  /store:
+    delete:
+      tags:
+        - store
+      summary: flush store
+      description: delete all items
+      operationId: flushStore
+      responses:
+        "200":
+          description: all items deleted
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: object
+                    example: {}
+                  description:
+                    type: string
+                    example: all items deleted
   /store/{key}:
     get:
       tags:
