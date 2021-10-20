@@ -12,23 +12,27 @@ import (
 	"strings"
 )
 
-const JsonFileSuffix = "-data.json"
+const JSONFileSuffix = "-data.json"
 
 type StoreRepository interface {
 	Get(key string) string
 	Set(key string, value string)
 	Flush() map[string]string
+	GetStore() map[string]string
 }
 
 type storeRepository struct {
-	storageDirPath string
-	store          map[string]string
+	store map[string]string
 }
 
 func NewStoreRepository(path string) StoreRepository {
-	repository := &storeRepository{storageDirPath: path}
+	repository := &storeRepository{}
 	repository.store = repository.loadStoreDataFromFile(path)
 	return repository
+}
+
+func (s *storeRepository) GetStore() map[string]string {
+	return s.store
 }
 
 func (s *storeRepository) Flush() map[string]string {
@@ -102,14 +106,14 @@ func SortTimestampDescend(files []os.FileInfo) {
 }
 
 func getTimestampFromFilename(filename string) string {
-	timestamp := filename[:len(filename)-len(JsonFileSuffix)]
+	timestamp := filename[:len(filename)-len(JSONFileSuffix)]
 	return timestamp
 }
 
 func filterValidDataFiles(files []os.FileInfo) []os.FileInfo {
 	result := make([]os.FileInfo, 0)
 	for _, file := range files {
-		if strings.Contains(file.Name(), JsonFileSuffix) {
+		if strings.Contains(file.Name(), JSONFileSuffix) {
 			timestamp := getTimestampFromFilename(file.Name())
 			if _, err := strconv.Atoi(timestamp); err == nil {
 				result = append(result, file)
