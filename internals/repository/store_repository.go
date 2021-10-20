@@ -16,7 +16,7 @@ const JSONFileSuffix = "-data.json"
 
 type StoreRepository interface {
 	Get(key string) string
-	Set(key string, value string)
+	Set(key string, value string) bool
 	Flush() map[string]string
 	GetStore() map[string]string
 }
@@ -47,8 +47,13 @@ func (s *storeRepository) Get(key string) string {
 	return ""
 }
 
-func (s *storeRepository) Set(key string, value string) {
+func (s *storeRepository) Set(key string, value string) bool {
+	keyAlreadyExists := false
+	if s.store[key] != "" {
+		keyAlreadyExists = true
+	}
 	s.store[key] = value
+	return keyAlreadyExists
 }
 
 func (s *storeRepository) loadStoreDataFromFile(path string) map[string]string {

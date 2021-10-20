@@ -15,7 +15,7 @@ const JSONFileSuffix = "-data.json"
 
 type StoreService interface {
 	Get(key string) (map[string]string, error)
-	Set(key string, value string) map[string]string
+	Set(key string, value string) (map[string]string, bool)
 	Flush() map[string]string
 }
 
@@ -38,9 +38,9 @@ func (s *storeService) Get(key string) (map[string]string, error) {
 	return map[string]string{key: value}, nil
 }
 
-func (s *storeService) Set(key, value string) map[string]string {
-	s.repository.Set(key, value)
-	return map[string]string{key: value}
+func (s *storeService) Set(key, value string) (map[string]string, bool) {
+	keyAlreadyExist := s.repository.Set(key, value)
+	return map[string]string{key: value}, keyAlreadyExist
 }
 
 func (s *storeService) Flush() map[string]string {

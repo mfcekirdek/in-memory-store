@@ -57,8 +57,12 @@ func (s *storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		result := s.service.Set(key, store["value"])
-		w.WriteHeader(http.StatusOK)
+		result, keyAlreadyExist := s.service.Set(key, store["value"])
+		if keyAlreadyExist {
+			w.WriteHeader(http.StatusOK)
+		} else {
+			w.WriteHeader(http.StatusCreated)
+		}
 		utils.ReturnJSONResponse(w, r, result)
 	default:
 		utils.HandleError(w, r, http.StatusMethodNotAllowed)
