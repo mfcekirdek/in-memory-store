@@ -94,8 +94,8 @@ deploy-job:
   script:
     - echo "Deploying application..."
     - kubectl create secret -n "$KUBE_NAMESPACE" docker-registry gitlab-registry --docker-server="$CI_REGISTRY" --docker-username="$DEPLOY_TOKEN_USERNAME" --docker-password="$DEPLOY_TOKEN_PASSWORD" --docker-email="$GITLAB_USER_EMAIL" --dry-run=client -o yaml | kubectl replace -n "$KUBE_NAMESPACE" --force -f -
-    - kubectl delete pods -l app=kv-store -n "$KUBE_NAMESPACE"
-   # - kubectl delete -f deployments/deploy2k8s.yaml Yukardaki replica setleri silemiyo..
+    #- kubectl delete pods -l app=kv-store -n "$KUBE_NAMESPACE"
+    - kubectl delete -f deployments/deploy2k8s.yaml
     - kubectl apply -f deployments/deploy2k8s.yaml
     - kubectl get pods
   environment:
