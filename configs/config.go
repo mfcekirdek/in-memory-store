@@ -6,28 +6,28 @@ import (
 )
 
 type Config struct {
-	IsDebug        bool
-	AppName        string
-	FlushInterval  int
-	StorageDirPath string
-	Server         ServerConfig
+	IsDebug            bool
+	AppName            string
+	SaveToFileInterval int
+	StorageDirPath     string
+	Server             ServerConfig
 }
 
 func NewConfig() *Config {
-	flushInterval := 10 // in minutes // added this variable to prevent 'magic number detected' lint error (gomnd)
-	defaultPort := 8080 // added this variable to prevent 'magic number detected' lint error (gomnd)
+	saveToFileInterval := 10 // in minutes // added this variable to prevent 'magic number detected' lint error (gomnd)
+	defaultPort := 8080      // added this variable to prevent 'magic number detected' lint error (gomnd)
 	viper.SetDefault("IS_DEBUG", true)
 	viper.SetDefault("APP_NAME", "kv-store")
 	viper.SetDefault("STORAGE_DIR_PATH", "storage")
-	viper.SetDefault("FLUSH_INTERVAL", flushInterval)
+	viper.SetDefault("SAVE_TO_FILE_INTERVAL", saveToFileInterval)
 	viper.SetDefault("PORT", defaultPort)
 	viper.AutomaticEnv()
 
 	config := &Config{
-		IsDebug:        viper.GetBool("IS_DEBUG"),
-		AppName:        viper.GetString("APP_NAME"),
-		StorageDirPath: viper.GetString("STORAGE_DIR_PATH"),
-		FlushInterval:  viper.GetInt("FLUSH_INTERVAL"),
+		IsDebug:            viper.GetBool("IS_DEBUG"),
+		AppName:            viper.GetString("APP_NAME"),
+		StorageDirPath:     viper.GetString("STORAGE_DIR_PATH"),
+		SaveToFileInterval: viper.GetInt("SAVE_TO_FILE_INTERVAL"),
 		Server: ServerConfig{
 			Port: viper.GetInt("PORT"),
 		},

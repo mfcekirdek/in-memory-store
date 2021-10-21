@@ -32,8 +32,8 @@ spec:
             value: "true"
           - name: STORAGE_DIR_PATH
             value: "storage"
-          - name: FLUSH_INTERVAL
-            value: "2"
+          - name: SAVE_TO_FILE_INTERVAL
+            value: "1"
           - name: PORT
             value: "8080"
         resources: {}
