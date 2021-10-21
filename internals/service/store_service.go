@@ -26,11 +26,11 @@ type StoreService interface {
 }
 
 type storeService struct {
-	repository     repository.StoreRepository
+	repository     repository.IStoreRepository
 	storageDirPath string
 }
 
-func NewStoreService(repo repository.StoreRepository, flushInterval int, path string) StoreService {
+func NewStoreService(repo repository.IStoreRepository, flushInterval int, path string) StoreService {
 	service := &storeService{repository: repo, storageDirPath: path}
 	store := service.loadStoreDataFromFile(path)
 	service.repository.LoadStore(store)

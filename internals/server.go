@@ -29,12 +29,13 @@ func NewServer(c *configs.Config) *Server {
 func (s *Server) Start() error {
 	addr := fmt.Sprintf(":%d", s.config.Server.Port)
 	s.Routes()
-	wrappedMux := middleware.NewHeaderMiddleware(s.mux)
+	var wrappedMux http.Handler
+	wrappedMux = middleware.NewHeaderMiddleware(s.mux)
 	if s.config.IsDebug {
-		wrappedMux := middleware.NewLoggerMiddleware(wrappedMux)
-		return http.ListenAndServe(addr, wrappedMux)
+		wrappedMux = middleware.NewLoggerMiddleware(wrappedMux)
 	}
 	return http.ListenAndServe(addr, wrappedMux)
+	//return http.ListenAndServeTLS(addr, "configs/tls/server.crt", "configs/tls/server.key", wrappedMux)
 }
 
 func (s *Server) Routes() {
