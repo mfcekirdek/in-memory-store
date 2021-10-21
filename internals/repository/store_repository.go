@@ -1,6 +1,6 @@
 package repository
 
-type IStoreRepository interface {
+type StoreRepository interface {
 	Get(key string) string
 	Set(key string, value string) bool
 	Flush() map[string]string
@@ -8,40 +8,40 @@ type IStoreRepository interface {
 	LoadStore(store map[string]string)
 }
 
-type StoreRepository struct {
-	Store map[string]string
+type storeRepository struct {
+	store map[string]string
 }
 
-func NewStoreRepository() IStoreRepository {
-	repository := &StoreRepository{}
+func NewStoreRepository() StoreRepository {
+	repository := &storeRepository{}
 	return repository
 }
 
-func (s StoreRepository) GetStore() map[string]string {
-	return s.Store
+func (s storeRepository) GetStore() map[string]string {
+	return s.store
 }
 
-func (s StoreRepository) LoadStore(store map[string]string) {
-	s.Store = store
+func (s storeRepository) LoadStore(store map[string]string) {
+	s.store = store
 }
 
-func (s StoreRepository) Flush() map[string]string {
-	s.Store = map[string]string{}
-	return s.Store
+func (s storeRepository) Flush() map[string]string {
+	s.store = map[string]string{}
+	return s.store
 }
 
-func (s StoreRepository) Get(key string) string {
-	if value, ok := s.Store[key]; ok {
+func (s storeRepository) Get(key string) string {
+	if value, ok := s.store[key]; ok {
 		return value
 	}
 	return ""
 }
 
-func (s StoreRepository) Set(key, value string) bool {
+func (s storeRepository) Set(key, value string) bool {
 	keyAlreadyExists := false
-	if s.Store[key] != "" {
+	if s.store[key] != "" {
 		keyAlreadyExists = true
 	}
-	s.Store[key] = value
+	s.store[key] = value
 	return keyAlreadyExists
 }
