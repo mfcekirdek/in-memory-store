@@ -27,3 +27,7 @@ lint:
 .PHONY: build-docker-image
 build-docker-image:
 	docker build -t registry.gitlab.com/mfcekirdek/kv-store:latest -f deployments/Dockerfile .
+
+.PHONY: generate-mocks
+generate-mocks:
+	sh mockgen.sh

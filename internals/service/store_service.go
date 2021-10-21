@@ -26,19 +26,20 @@ type StoreService interface {
 }
 
 type storeService struct {
-	repository     repository.IStoreRepository
+	repository     repository.StoreRepository
 	storageDirPath string
 }
 
-func NewStoreService(repo repository.IStoreRepository, flushInterval int, path string) StoreService {
+func NewStoreService(repo repository.StoreRepository, interval int, path string) StoreService {
 	service := &storeService{repository: repo, storageDirPath: path}
-	store := service.loadStoreDataFromFile(path)
+	store := readStoreDataFromFile(path)
 	service.repository.LoadStore(store)
-	go service.BackgroundTask(flushInterval, saveToJSONFile)
+	intervalDuration := 60 * time.Second * time.Duration(interval)
+	go backgroundTask(intervalDuration, path, store, saveToJSONFile)
 	return service
 }
 
-func (s *storeService) Get(key string) (map[string]string, error) {
+func (s storeService) Get(key string) (map[string]string, error) {
 	value := s.repository.Get(key)
 	if value == "" {
 		return nil, utils.ErrNotFound
@@ -46,66 +47,59 @@ func (s *storeService) Get(key string) (map[string]string, error) {
 	return map[string]string{key: value}, nil
 }
 
-func (s *storeService) Set(key, value string) (map[string]string, bool) {
+func (s storeService) Set(key, value string) (map[string]string, bool) {
 	keyAlreadyExist := s.repository.Set(key, value)
 	return map[string]string{key: value}, keyAlreadyExist
 }
 
-func (s *storeService) Flush() map[string]string {
+func (s storeService) Flush() map[string]string {
 	return s.repository.Flush()
 }
 
-func (s *storeService) BackgroundTask(interval int, task func(filepath string, store map[string]string) error) {
-	dateTicker := time.NewTicker(time.Duration(interval) * time.Minute)
+//Start a goroutine to save the store to file at intervals
+func backgroundTask(interval time.Duration, storageDirPath string, store map[string]string, task func(filepath string, store map[string]string) error) {
+	dateTicker := time.NewTicker(interval)
 	for now := range dateTicker.C {
 		timestamp := now.Unix()
 		fileName := fmt.Sprintf("%d%s", timestamp, JSONFileSuffix)
-		filePath := filepath.Join(s.storageDirPath, fileName)
-		err := task(filePath, s.repository.GetStore())
+		filePath := filepath.Join(storageDirPath, fileName)
+		err := task(filePath, store)
 		if err != nil {
 			log.Println("Could not write to json file --> ", filePath)
 		}
 	}
 }
 
-func (s *storeService) loadStoreDataFromFile(path string) map[string]string {
+func readStoreDataFromFile(path string) map[string]string {
 	if err := os.MkdirAll(path, os.ModePerm); err != nil {
 		log.Println("Could not create storage directory", err)
 		return map[string]string{}
 	}
 
-	files, err := ioutil.ReadDir(path)
-	if err != nil {
-		log.Println("Could not read files on the path", err)
-		return map[string]string{}
-	}
-
+	files, _ := ioutil.ReadDir(path)
 	jsonFilePath := findJSONFilePath(path, files)
-	store := loadJSONFileToMap(jsonFilePath)
-
+	store := saveToMap(jsonFilePath)
 	return store
 }
 
 func saveToJSONFile(filePath string, store map[string]string) error {
 	log.Println("Saving store to file -> ", filePath)
-	file, err := json.MarshalIndent(store, "", " ")
-	if err != nil {
-		return err
-	}
 	var perm fs.FileMode = 0600
-	err = ioutil.WriteFile(filePath, file, perm)
+	file, _ := json.MarshalIndent(store, "", " ")
+	err := ioutil.WriteFile(filePath, file, perm)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	return nil
 }
 
-func loadJSONFileToMap(jsonFilePath string) map[string]string {
+func saveToMap(jsonFilePath string) map[string]string {
 	store := map[string]string{}
 	jsonFile, err := os.Open(jsonFilePath)
 	if err != nil {
 		log.Println("Could not find a json file to load data. -> Initializing an empty store..")
-		return store
+		return nil
 	}
 	log.Printf("Successfully Opened the json file %s", jsonFilePath)
 	defer jsonFile.Close()
@@ -114,6 +108,7 @@ func loadJSONFileToMap(jsonFilePath string) map[string]string {
 	err = json.Unmarshal(byteValue, &store)
 	if err != nil {
 		log.Println(err)
+		return nil
 	}
 	return store
 }
