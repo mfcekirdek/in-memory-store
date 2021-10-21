@@ -104,7 +104,7 @@ func loadJSONFileToMap(jsonFilePath string) map[string]string {
 	store := map[string]string{}
 	jsonFile, err := os.Open(jsonFilePath)
 	if err != nil {
-		log.Println(err)
+		log.Println("Could not find a json file to load data. -> Initializing an empty store..")
 		return store
 	}
 	log.Printf("Successfully Opened the json file %s", jsonFilePath)
