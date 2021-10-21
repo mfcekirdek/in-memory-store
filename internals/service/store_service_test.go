@@ -205,6 +205,9 @@ func Test_saveToMap(t *testing.T) {
 }
 
 func Test_saveToJSONFile(t *testing.T) {
+	path := "/tmp/tmp.json"
+	defer os.RemoveAll(path)
+
 	type args struct {
 		filePath string
 		store    map[string]string
@@ -222,7 +225,7 @@ func Test_saveToJSONFile(t *testing.T) {
 			true},
 		{"valid path",
 			args{
-				filePath: "/tmp/tmp.json",
+				filePath: path,
 				store:    map[string]string{"foo": "bar"},
 			},
 			false},

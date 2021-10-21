@@ -39,7 +39,7 @@ func NewStoreService(repo repository.StoreRepository, interval int, path string)
 	return service
 }
 
-func (s storeService) Get(key string) (map[string]string, error) {
+func (s *storeService) Get(key string) (map[string]string, error) {
 	value := s.repository.Get(key)
 	if value == "" {
 		return nil, utils.ErrNotFound
@@ -47,12 +47,12 @@ func (s storeService) Get(key string) (map[string]string, error) {
 	return map[string]string{key: value}, nil
 }
 
-func (s storeService) Set(key, value string) (map[string]string, bool) {
+func (s *storeService) Set(key, value string) (map[string]string, bool) {
 	keyAlreadyExist := s.repository.Set(key, value)
 	return map[string]string{key: value}, keyAlreadyExist
 }
 
-func (s storeService) Flush() map[string]string {
+func (s *storeService) Flush() map[string]string {
 	return s.repository.Flush()
 }
 

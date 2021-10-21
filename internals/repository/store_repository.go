@@ -17,28 +17,31 @@ func NewStoreRepository() StoreRepository {
 	return repository
 }
 
-func (s storeRepository) GetStore() map[string]string {
+func (s *storeRepository) GetStore() map[string]string {
 	return s.store
 }
 
-func (s storeRepository) LoadStore(store map[string]string) {
+func (s *storeRepository) LoadStore(store map[string]string) {
 	s.store = store
 }
 
-func (s storeRepository) Flush() map[string]string {
+func (s *storeRepository) Flush() map[string]string {
 	s.store = map[string]string{}
 	return s.store
 }
 
-func (s storeRepository) Get(key string) string {
+func (s *storeRepository) Get(key string) string {
 	if value, ok := s.store[key]; ok {
 		return value
 	}
 	return ""
 }
 
-func (s storeRepository) Set(key, value string) bool {
+func (s *storeRepository) Set(key, value string) bool {
 	keyAlreadyExists := false
+	if s.store == nil {
+		s.store = map[string]string{}
+	}
 	if s.store[key] != "" {
 		keyAlreadyExists = true
 	}

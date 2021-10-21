@@ -24,7 +24,7 @@ func NewStoreHandler(svc service.StoreService) StoreHandler {
 	return handler
 }
 
-func (s *storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (s storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	key := r.URL.Path[len("/api/v1/store/"):]
 
 	switch r.Method {
@@ -37,7 +37,7 @@ func (s *storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			utils.HandleError(w, r, http.StatusNotFound)
 		} else {
 			w.WriteHeader(http.StatusOK)
-			utils.ReturnJSONResponse(w, r, result)
+			utils.ReturnJSONResponse(w, r, result, "item fetched")
 		}
 	case http.MethodPut:
 		if key == "" {
@@ -60,21 +60,22 @@ func (s *storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		result, keyAlreadyExist := s.service.Set(key, store["value"])
 		if keyAlreadyExist {
 			w.WriteHeader(http.StatusOK)
+			utils.ReturnJSONResponse(w, r, result, "item updated")
 		} else {
 			w.WriteHeader(http.StatusCreated)
+			utils.ReturnJSONResponse(w, r, result, "item created")
 		}
-		utils.ReturnJSONResponse(w, r, result)
 	default:
 		utils.HandleError(w, r, http.StatusMethodNotAllowed)
 	}
 }
 
-func (s *storeHandler) Flush(w http.ResponseWriter, r *http.Request) {
+func (s storeHandler) Flush(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodDelete:
 		w.WriteHeader(http.StatusOK)
 		result := s.service.Flush()
-		utils.ReturnJSONResponse(w, r, result)
+		utils.ReturnJSONResponse(w, r, result, "all items deleted")
 		return
 	default:
 		utils.HandleError(w, r, http.StatusMethodNotAllowed)

@@ -11,11 +11,11 @@ import (
 func HandleError(w http.ResponseWriter, r *http.Request, status int) {
 	var response *model.BaseResponse
 	if status == http.StatusNotFound {
-		response = GenerateResponse(nil, "Not found")
+		response = GenerateResponse(nil, "not found")
 	} else if status == http.StatusBadRequest {
-		response = GenerateResponse(nil, "Bad Request")
+		response = GenerateResponse(nil, "bad request")
 	} else if status == http.StatusMethodNotAllowed {
-		response = GenerateResponse(nil, "Method Not Allowed")
+		response = GenerateResponse(nil, "method not allowed")
 	}
 
 	resp, err := json.Marshal(response)
@@ -31,8 +31,8 @@ func HandleError(w http.ResponseWriter, r *http.Request, status int) {
 	}
 }
 
-func ReturnJSONResponse(w http.ResponseWriter, r *http.Request, result interface{}) {
-	response := GenerateResponse(result, "")
+func ReturnJSONResponse(w http.ResponseWriter, r *http.Request, result interface{}, description string) {
+	response := GenerateResponse(result, description)
 	resp, err := json.Marshal(response)
 	if err != nil {
 		log.Printf("Error happened in JSON marshal. Err: %s\n", err.Error())

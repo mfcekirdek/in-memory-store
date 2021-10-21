@@ -48,5 +48,5 @@ func (s *Server) Routes() {
 }
 
 func checkHealth(w http.ResponseWriter, r *http.Request) {
-	utils.ReturnJSONResponse(w, r, map[string]string{"status": "OK"})
+	utils.ReturnJSONResponse(w, r, map[string]string{"status": "OK"}, "healthy")
 }
