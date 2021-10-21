@@ -57,8 +57,8 @@ func (s *storeService) Flush() map[string]string {
 
 func (s *storeService) BackgroundTask(interval int, task func(filepath string, store map[string]string) error) {
 	dateTicker := time.NewTicker(time.Duration(interval) * time.Minute)
-	for range dateTicker.C {
-		timestamp := time.Now().Unix()
+	for now := range dateTicker.C {
+		timestamp := now.Unix()
 		fileName := fmt.Sprintf("%d%s", timestamp, JSONFileSuffix)
 		filePath := filepath.Join(s.storageDirPath, fileName)
 		err := task(filePath, s.repository.GetStore())
