@@ -2,7 +2,7 @@ image: golang:1.16-alpine3.14
 
 stages:
     - build
-    - test
+#    - test
     # - code-analysis
     - dockerize
     - deploy
@@ -32,26 +32,26 @@ build-job:
   artifacts:
     paths:
       - app
-
-lint-test-job:
-  image: golangci/golangci-lint:v1.41.1
-  stage: test
-  extends: .go-cache
-  variables:
-    LINT_TIMEOUT: 5m
-    LINT_CONFIG_PATH: "configs/linter/.golangci.yml"
-    EXTRA_PARAMETERS: ""
-  script:
-    - golangci-lint run -c $LINT_CONFIG_PATH -v --timeout $LINT_TIMEOUT $EXTRA_PARAMETERS --fix
-
-unit-test-job:
-  stage: test
-  extends: .go-cache
-  script:
-    - CGO_ENABLED=0 go test -v ./... -coverprofile=unit_coverage.out -tags=unit
-  artifacts:
-    paths:
-      - ${CI_PROJECT_DIR}/unit_coverage.out
+#
+#lint-test-job:
+#  image: golangci/golangci-lint:v1.41.1
+#  stage: test
+#  extends: .go-cache
+#  variables:
+#    LINT_TIMEOUT: 5m
+#    LINT_CONFIG_PATH: "configs/linter/.golangci.yml"
+#    EXTRA_PARAMETERS: ""
+#  script:
+#    - golangci-lint run -c $LINT_CONFIG_PATH -v --timeout $LINT_TIMEOUT $EXTRA_PARAMETERS --fix
+#
+#unit-test-job:
+#  stage: test
+#  extends: .go-cache
+#  script:
+#    - CGO_ENABLED=0 go test -v ./... -coverprofile=unit_coverage.out -tags=unit
+#  artifacts:
+#    paths:
+#      - ${CI_PROJECT_DIR}/unit_coverage.out
 
 #sonarqube:
 #  stage: code-analysis
