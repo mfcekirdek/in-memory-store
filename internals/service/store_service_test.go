@@ -192,9 +192,9 @@ func Test_saveToMap(t *testing.T) {
 		args args
 		want map[string]string
 	}{
-		{"File does not exist", args{jsonFilePath: "/wrong/path"}, nil},
+		{"File does not exist", args{jsonFilePath: "/wrong/path"}, map[string]string{}},
 		{"File exists with valid content", args{jsonFilePath: filePath}, store},
-		{"File exists not valid content", args{jsonFilePath: filePath2}, nil},
+		{"File exists not valid content", args{jsonFilePath: filePath2}, map[string]string{}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -432,7 +432,7 @@ func Test_readStoreDataFromFile(t *testing.T) {
 		args args
 		want map[string]string
 	}{
-		{"Could not create directory", args{path: "/path"}, map[string]string{}},
+		{"file does not exist", args{path: "/tmp"}, map[string]string{}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

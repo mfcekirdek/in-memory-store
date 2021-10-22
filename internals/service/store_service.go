@@ -71,11 +71,7 @@ func backgroundTask(interval time.Duration, storageDir string, store map[string]
 }
 
 func readStoreDataFromFile(path string) map[string]string {
-	if err := os.MkdirAll(path, os.ModePerm); err != nil {
-		log.Println("Could not create storage directory", err)
-		return map[string]string{}
-	}
-
+	_ = os.MkdirAll(path, os.ModePerm)
 	files, _ := ioutil.ReadDir(path)
 	jsonFilePath := findJSONFilePath(path, files)
 	store := saveToMap(jsonFilePath)
@@ -99,7 +95,7 @@ func saveToMap(jsonFilePath string) map[string]string {
 	jsonFile, err := os.Open(jsonFilePath)
 	if err != nil {
 		log.Println("Could not find a json file to load data. -> Initializing an empty store..")
-		return nil
+		return map[string]string{}
 	}
 	log.Printf("Successfully Opened the json file %s", jsonFilePath)
 	defer jsonFile.Close()
@@ -108,7 +104,7 @@ func saveToMap(jsonFilePath string) map[string]string {
 	err = json.Unmarshal(byteValue, &store)
 	if err != nil {
 		log.Println(err)
-		return nil
+		return map[string]string{}
 	}
 	return store
 }
