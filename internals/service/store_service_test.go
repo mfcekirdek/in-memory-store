@@ -431,7 +431,7 @@ func Test_readStoreDataFromFile(t *testing.T) {
 		args args
 		want map[string]string
 	}{
-		{"Could not create directory", args{path: "/root"}, map[string]string{}},
+		{"Could not create directory", args{path: "/path"}, map[string]string{}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
