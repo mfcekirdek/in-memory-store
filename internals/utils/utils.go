@@ -13,7 +13,7 @@ func HandleError(w http.ResponseWriter, r *http.Request, status int) {
 	if status == http.StatusNotFound {
 		response = GenerateResponse(nil, "not found")
 	} else if status == http.StatusBadRequest {
-		response = GenerateResponse(nil, "bad request")
+		response = GenerateResponse(nil, "bad input parameter/body")
 	} else if status == http.StatusMethodNotAllowed {
 		response = GenerateResponse(nil, "method not allowed")
 	}
