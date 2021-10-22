@@ -8,8 +8,6 @@ type loggingResponseWriter struct {
 }
 
 func newLoggingResponseWriter(w http.ResponseWriter) *loggingResponseWriter {
-	// WriteHeader(int) is not called if our response implicitly returns 200 OK, so
-	// we default to that status code.
 	return &loggingResponseWriter{w, http.StatusOK}
 }
 

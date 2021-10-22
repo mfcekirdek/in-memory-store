@@ -17,7 +17,6 @@ func (l *HeaderMiddleware) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "OPTIONS" {
 		return
 	}
-
 	l.handler.ServeHTTP(w, r)
 }
 
