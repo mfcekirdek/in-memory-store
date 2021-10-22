@@ -18,17 +18,9 @@ func HandleError(w http.ResponseWriter, r *http.Request, status int) {
 		response = GenerateResponse(nil, "method not allowed")
 	}
 
-	resp, err := json.Marshal(response)
-	if err != nil {
-		log.Printf("Err: %s\n", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	resp, _ := json.Marshal(response)
 	w.WriteHeader(status)
-	if _, err := w.Write(resp); err != nil {
-		log.Printf("Err: %s\n", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-	}
+	_, _ = w.Write(resp)
 }
 
 func ReturnJSONResponse(w http.ResponseWriter, r *http.Request, result interface{}, description string) {
@@ -39,10 +31,8 @@ func ReturnJSONResponse(w http.ResponseWriter, r *http.Request, result interface
 		HandleError(w, r, http.StatusInternalServerError)
 		return
 	}
-	if _, err := w.Write(resp); err != nil {
-		log.Printf("Err: %s\n", err.Error())
-		HandleError(w, r, http.StatusInternalServerError)
-	}
+
+	_, _ = w.Write(resp)
 }
 
 func GenerateResponse(data interface{}, description string) *model.BaseResponse {
