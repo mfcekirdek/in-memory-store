@@ -3,6 +3,8 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/repository"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/utils"
 	"io/fs"
 	"io/ioutil"
 	"log"
@@ -12,9 +14,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"gitlab.com/mfcekirdek/in-memory-store/internal/repository"
-	"gitlab.com/mfcekirdek/in-memory-store/internal/utils"
 )
 
 const JSONFileSuffix = "-data.json"

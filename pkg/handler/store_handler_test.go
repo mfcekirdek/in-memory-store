@@ -5,15 +5,15 @@ package handler
 import (
 	"bytes"
 	"encoding/json"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/model"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/service"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/utils"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"gitlab.com/mfcekirdek/in-memory-store/internal/model"
-	"gitlab.com/mfcekirdek/in-memory-store/internal/service"
-	"gitlab.com/mfcekirdek/in-memory-store/internal/utils"
 	"gitlab.com/mfcekirdek/in-memory-store/mocks"
 	"gitlab.com/mfcekirdek/in-memory-store/test"
 )
@@ -102,21 +102,21 @@ func Test_storeHandler_Flush(t *testing.T) {
 
 func Test_storeHandler_ServeHTTP(t *testing.T) {
 	mockController := gomock.NewController(t)
-	mockService200 := mocks.NewMockStoreService(mockController)
-	mockService200.
+	mockservice00 := mocks.NewMockStoreService(mockController)
+	mockservice00.
 		EXPECT().
 		Get("foo").
 		Return(map[string]string{"foo": "bar"}, nil).
 		MaxTimes(1)
 
-	mockService200.
+	mockservice00.
 		EXPECT().
 		Set("foo", "bar").
 		Return(map[string]string{"foo": "bar"}, true).
 		MaxTimes(1)
 
-	mockService201 := mocks.NewMockStoreService(mockController)
-	mockService201.
+	mockservice01 := mocks.NewMockStoreService(mockController)
+	mockservice01.
 		EXPECT().
 		Set("foo", "bar").
 		Return(map[string]string{"foo": "bar"}, false).
@@ -157,7 +157,7 @@ func Test_storeHandler_ServeHTTP(t *testing.T) {
 		want           *model.BaseResponse
 		wantStatusCode int
 	}{
-		{"[200] GET - item fetched", fields{service: mockService200}, args{
+		{"[200] GET - item fetched", fields{service: mockservice00}, args{
 			w: wGet200,
 			r: rGet200,
 		}, &model.BaseResponse{
@@ -185,35 +185,35 @@ func Test_storeHandler_ServeHTTP(t *testing.T) {
 			Data:        nil,
 			Description: "method not allowed",
 		}, http.StatusMethodNotAllowed},
-		{"[200] PUT - item updated", fields{service: mockService200}, args{
+		{"[200] PUT - item updated", fields{service: mockservice00}, args{
 			w: wPut200,
 			r: rPut200,
 		}, &model.BaseResponse{
 			Data:        map[string]interface{}{"foo": "bar"},
 			Description: "item updated",
 		}, http.StatusOK},
-		{"[201] PUT - item created", fields{service: mockService201}, args{
+		{"[201] PUT - item created", fields{service: mockservice01}, args{
 			w: wPut201,
 			r: rPut201,
 		}, &model.BaseResponse{
 			Data:        map[string]interface{}{"foo": "bar"},
 			Description: "item created",
 		}, http.StatusCreated},
-		{"[400] PUT - bad input parameter/body - missing path param", fields{service: mockService201}, args{
+		{"[400] PUT - bad input parameter/body - missing path param", fields{service: mockservice01}, args{
 			w: wPut400MissingPathParam,
 			r: rPut400MissingPathParam,
 		}, &model.BaseResponse{
 			Data:        nil,
 			Description: "bad input parameter/body",
 		}, http.StatusBadRequest},
-		{"[400] PUT - bad input parameter/body - missing body param", fields{service: mockService201}, args{
+		{"[400] PUT - bad input parameter/body - missing body param", fields{service: mockservice01}, args{
 			w: wPut400MissingBodyParam,
 			r: rPut400MissingBodyParam,
 		}, &model.BaseResponse{
 			Data:        nil,
 			Description: "bad input parameter/body",
 		}, http.StatusBadRequest},
-		{"[400] PUT - bad input parameter/body - bad body param", fields{service: mockService201}, args{
+		{"[400] PUT - bad input parameter/body - bad body param", fields{service: mockservice01}, args{
 			w: wPut400BadBodyParam,
 			r: rPut400BadBodyParam,
 		}, &model.BaseResponse{

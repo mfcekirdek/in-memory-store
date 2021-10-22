@@ -2,14 +2,13 @@ package utils
 
 import (
 	"encoding/json"
+	model2 "gitlab.com/mfcekirdek/in-memory-store/pkg/model"
 	"log"
 	"net/http"
-
-	"gitlab.com/mfcekirdek/in-memory-store/internal/model"
 )
 
 func HandleError(w http.ResponseWriter, r *http.Request, status int) {
-	var response *model.BaseResponse
+	var response *model2.BaseResponse
 	if status == http.StatusNotFound {
 		response = GenerateResponse(nil, "not found")
 	} else if status == http.StatusBadRequest {
@@ -35,8 +34,8 @@ func ReturnJSONResponse(w http.ResponseWriter, r *http.Request, result interface
 	_, _ = w.Write(resp)
 }
 
-func GenerateResponse(data interface{}, description string) *model.BaseResponse {
-	response := model.BaseResponse{
+func GenerateResponse(data interface{}, description string) *model2.BaseResponse {
+	response := model2.BaseResponse{
 		Data:        data,
 		Description: description,
 	}

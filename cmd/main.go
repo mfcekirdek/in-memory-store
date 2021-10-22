@@ -1,4 +1,4 @@
-// Main package loads the configuration
+// Package main loads the configuration from environment variables and starts the server.
 package main
 
 import (

@@ -1,13 +1,12 @@
+// Package Handler handles the HTTP requests.
 package handler
 
 import (
 	"encoding/json"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/service"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/utils"
 	"io"
 	"net/http"
-
-	"gitlab.com/mfcekirdek/in-memory-store/internal/service"
-
-	"gitlab.com/mfcekirdek/in-memory-store/internal/utils"
 )
 
 type StoreHandler interface {
@@ -15,15 +14,20 @@ type StoreHandler interface {
 	Flush(w http.ResponseWriter, r *http.Request)
 }
 
+// storeHandler implements StoreHandler Interface.
 type storeHandler struct {
 	service service.StoreService
 }
 
+// NewStoreHandler creates a new storeHandler instance.
 func NewStoreHandler(svc service.StoreService) StoreHandler {
 	handler := &storeHandler{service: svc}
 	return handler
 }
 
+// ServeHTTP handles HTTP requests to "/api/v1/store/<keyParam>"
+// If HTTP method is GET or PUT and parameters are valid,
+// ServeHTTP responds to the request using StoreService to do GET/SET operations.
 func (s storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	key := r.URL.Path[len("/api/v1/store/"):]
 
@@ -70,6 +74,8 @@ func (s storeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Flush handles DELETE requests to "/api/v1/store"
+// Responds with empty object after deleting all store data via StoreService.
 func (s storeHandler) Flush(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodDelete:

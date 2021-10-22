@@ -4,11 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	model2 "gitlab.com/mfcekirdek/in-memory-store/pkg/model"
 	"io"
 	"net/http"
 	"net/http/httptest"
-
-	"gitlab.com/mfcekirdek/in-memory-store/internal/model"
 )
 
 func CreateHTTPReq(method, endpoint string, body io.Reader) (*httptest.ResponseRecorder, *http.Request) {
@@ -24,8 +23,8 @@ func CreateHTTPReq(method, endpoint string, body io.Reader) (*httptest.ResponseR
 	return rec, req
 }
 
-func ParseBody(body []byte) *model.BaseResponse {
-	var actualResponseBody *model.BaseResponse
+func ParseBody(body []byte) *model2.BaseResponse {
+	var actualResponseBody *model2.BaseResponse
 	err := json.Unmarshal(body, &actualResponseBody)
 	if err != nil {
 		fmt.Println(err)

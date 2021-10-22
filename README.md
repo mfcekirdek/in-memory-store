@@ -1,0 +1,1 @@
+http://localhost:6060/pkg/gitlab.com/mfcekirdek/in-memory-store/?m=all
