@@ -1,3 +1,4 @@
+// Package internal has private application and library code.
 package internal
 
 import (
@@ -12,11 +13,13 @@ import (
 	"gitlab.com/mfcekirdek/in-memory-store/configs"
 )
 
+// Server contains mux and config objects.
 type Server struct {
 	mux    *http.ServeMux
 	config *configs.Config
 }
 
+// Takes config parameters and creates a new Server instance with given configs.
 func NewServer(c *configs.Config) *Server {
 	server := &Server{
 		mux:    http.NewServeMux(),
@@ -25,6 +28,9 @@ func NewServer(c *configs.Config) *Server {
 	return server
 }
 
+// Creates all the routings.
+// Wraps handler instance with Header and Logger middlewares.
+// Starts the server with given configs.
 func (s *Server) Start() error {
 	addr := fmt.Sprintf(":%d", s.config.Server.Port)
 	s.Routes()
@@ -36,6 +42,7 @@ func (s *Server) Start() error {
 	return http.ListenAndServe(addr, wrappedMux)
 }
 
+// Creates routings.
 func (s *Server) Routes() {
 	storeRepository := repository.NewStoreRepository()
 	storeService := service.NewStoreService(storeRepository, s.config.SaveToFileInterval, s.config.StorageDirPath)
@@ -45,6 +52,7 @@ func (s *Server) Routes() {
 	s.mux.Handle("/api/v1/store/", storeHandler)
 }
 
+// Responds GET requests to /health with {"status": "OK"} if the application is up and running.
 func checkHealth(w http.ResponseWriter, r *http.Request) {
 	utils.ReturnJSONResponse(w, r, map[string]string{"status": "OK"}, "healthy")
 }

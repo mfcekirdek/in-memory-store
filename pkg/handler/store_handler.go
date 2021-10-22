@@ -16,6 +16,7 @@ type StoreHandler interface {
 }
 
 // storeHandler implements StoreHandler Interface.
+// Contains StoreService.
 type storeHandler struct {
 	service service.StoreService
 }

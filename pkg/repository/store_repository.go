@@ -12,6 +12,7 @@ type StoreRepository interface {
 }
 
 // storeRepository implements StoreRepository Interface.
+// Contains store contents in a map.
 type storeRepository struct {
 	store map[string]string
 }

@@ -29,6 +29,7 @@ type StoreService interface {
 }
 
 // storeService implements the StoreService interface.
+// Contains StoreRepository and data storage path.
 type storeService struct {
 	repository     repository.StoreRepository
 	storageDirPath string
@@ -64,7 +65,7 @@ func (s *storeService) Set(key, value string) (map[string]string, bool) {
 	return map[string]string{key: value}, keyAlreadyExist
 }
 
-//Flush function calls repository layer Flush function, deletes all items in the store and returns the output.
+// Flush function calls repository layer Flush function, deletes all items in the store and returns the output.
 func (s *storeService) Flush() map[string]string {
 	return s.repository.Flush()
 }
