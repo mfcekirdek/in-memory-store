@@ -35,7 +35,6 @@ func (s *Server) Start() error {
 		wrappedMux = middleware.NewLoggerMiddleware(wrappedMux)
 	}
 	return http.ListenAndServe(addr, wrappedMux)
-	//return http.ListenAndServeTLS(addr, "configs/tls/server.crt", "configs/tls/server.key", wrappedMux)
 }
 
 func (s *Server) Routes() {

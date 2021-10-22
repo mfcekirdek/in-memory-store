@@ -56,13 +56,13 @@ func (s *storeService) Flush() map[string]string {
 	return s.repository.Flush()
 }
 
-//Start a goroutine to save the store to file at intervals
-func backgroundTask(interval time.Duration, storageDirPath string, store map[string]string, task func(filepath string, store map[string]string) error) {
+// Start a goroutine to save the store to file at intervals
+func backgroundTask(interval time.Duration, storageDir string, store map[string]string, task func(filepath string, store map[string]string) error) {
 	dateTicker := time.NewTicker(interval)
 	for now := range dateTicker.C {
 		timestamp := now.Unix()
 		fileName := fmt.Sprintf("%d%s", timestamp, JSONFileSuffix)
-		filePath := filepath.Join(storageDirPath, fileName)
+		filePath := filepath.Join(storageDir, fileName)
 		err := task(filePath, store)
 		if err != nil {
 			log.Println("Could not write to json file --> ", filePath)

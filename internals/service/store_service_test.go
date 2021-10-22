@@ -5,9 +5,6 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/golang/mock/gomock"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/repository"
-	"gitlab.com/mfcekirdek/in-memory-store/mocks"
 	"io/fs"
 	"io/ioutil"
 	"os"
@@ -15,6 +12,10 @@ import (
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/golang/mock/gomock"
+	"gitlab.com/mfcekirdek/in-memory-store/internals/repository"
+	"gitlab.com/mfcekirdek/in-memory-store/mocks"
 )
 
 func TestNewStoreService(t *testing.T) {
@@ -89,7 +90,7 @@ func Test_filterValidDataFiles(t *testing.T) {
 	}
 }
 
-func createFile(path string, validFileName string) {
+func createFile(path, validFileName string) {
 	filePath := filepath.Join(path, validFileName)
 	_, _ = os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 }

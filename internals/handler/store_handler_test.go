@@ -5,16 +5,17 @@ package handler
 import (
 	"bytes"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"reflect"
+	"testing"
+
 	"github.com/golang/mock/gomock"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/model"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/service"
 	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
 	"gitlab.com/mfcekirdek/in-memory-store/mocks"
 	"gitlab.com/mfcekirdek/in-memory-store/test"
-	"net/http"
-	"net/http/httptest"
-	"reflect"
-	"testing"
 )
 
 func TestNewStoreHandler(t *testing.T) {
