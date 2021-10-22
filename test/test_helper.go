@@ -1,3 +1,4 @@
+// Package test provides helper functions to the test suites.
 package test
 
 import (
@@ -8,9 +9,11 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	model2 "gitlab.com/mfcekirdek/in-memory-store/pkg/model"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/model"
 )
 
+// Takes HTTP method type, endpoint and body paremeters.
+// Creates a new HTTP Request and returns <httptest.ResponseRecorder> and <http.Request>.
 func CreateHTTPReq(method, endpoint string, body io.Reader) (*httptest.ResponseRecorder, *http.Request) {
 	if body == nil {
 		const size = 512
@@ -24,8 +27,9 @@ func CreateHTTPReq(method, endpoint string, body io.Reader) (*httptest.ResponseR
 	return rec, req
 }
 
-func ParseBody(body []byte) *model2.BaseResponse {
-	var actualResponseBody *model2.BaseResponse
+// Parses []byte HTTP response body and returs as BaseResponse model.
+func ParseBody(body []byte) *model.BaseResponse {
+	var actualResponseBody *model.BaseResponse
 	err := json.Unmarshal(body, &actualResponseBody)
 	if err != nil {
 		fmt.Println(err)
