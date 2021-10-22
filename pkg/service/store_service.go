@@ -5,8 +5,6 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"gitlab.com/mfcekirdek/in-memory-store/pkg/repository"
-	"gitlab.com/mfcekirdek/in-memory-store/pkg/utils"
 	"io/fs"
 	"io/ioutil"
 	"log"
@@ -16,12 +14,15 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/repository"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/utils"
 )
 
 // Suffix of valid store files
 const JSONFileSuffix = "-data.json"
 
-//StoreService interface has Get, Set and Flush functions.
+// StoreService interface has Get, Set and Flush functions.
 type StoreService interface {
 	Get(key string) (map[string]string, error)
 	Set(key string, value string) (map[string]string, bool)

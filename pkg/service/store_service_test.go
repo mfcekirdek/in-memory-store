@@ -5,7 +5,6 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"gitlab.com/mfcekirdek/in-memory-store/pkg/repository"
 	"io/fs"
 	"io/ioutil"
 	"os"
@@ -13,6 +12,8 @@ import (
 	"reflect"
 	"testing"
 	"time"
+
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/repository"
 
 	"github.com/golang/mock/gomock"
 	"gitlab.com/mfcekirdek/in-memory-store/mocks"

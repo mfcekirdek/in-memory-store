@@ -3,10 +3,11 @@ package handler
 
 import (
 	"encoding/json"
-	"gitlab.com/mfcekirdek/in-memory-store/pkg/service"
-	"gitlab.com/mfcekirdek/in-memory-store/pkg/utils"
 	"io"
 	"net/http"
+
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/service"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/utils"
 )
 
 // StoreHandler interface has ServeHTTP and Flush functions.

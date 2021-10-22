@@ -3,13 +3,14 @@
 package middleware
 
 import (
-	"github.com/golang/mock/gomock"
-	"gitlab.com/mfcekirdek/in-memory-store/mocks"
-	"gitlab.com/mfcekirdek/in-memory-store/test"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
+
+	"github.com/golang/mock/gomock"
+	"gitlab.com/mfcekirdek/in-memory-store/mocks"
+	"gitlab.com/mfcekirdek/in-memory-store/test"
 )
 
 func TestHeaderMiddleware_ServeHTTP(t *testing.T) {

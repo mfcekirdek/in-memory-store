@@ -3,13 +3,14 @@
 package utils
 
 import (
-	"gitlab.com/mfcekirdek/in-memory-store/pkg/model"
-	"gitlab.com/mfcekirdek/in-memory-store/test"
 	"math"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
+
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/model"
+	"gitlab.com/mfcekirdek/in-memory-store/test"
 )
 
 func TestGenerateResponse(t *testing.T) {

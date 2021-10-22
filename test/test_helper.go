@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	model2 "gitlab.com/mfcekirdek/in-memory-store/pkg/model"
 	"io"
 	"net/http"
 	"net/http/httptest"
+
+	model2 "gitlab.com/mfcekirdek/in-memory-store/pkg/model"
 )
 
 func CreateHTTPReq(method, endpoint string, body io.Reader) (*httptest.ResponseRecorder, *http.Request) {

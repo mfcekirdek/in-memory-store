@@ -5,13 +5,14 @@ package handler
 import (
 	"bytes"
 	"encoding/json"
-	"gitlab.com/mfcekirdek/in-memory-store/pkg/model"
-	"gitlab.com/mfcekirdek/in-memory-store/pkg/service"
-	"gitlab.com/mfcekirdek/in-memory-store/pkg/utils"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
+
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/model"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/service"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/utils"
 
 	"github.com/golang/mock/gomock"
 	"gitlab.com/mfcekirdek/in-memory-store/mocks"

@@ -3,12 +3,13 @@ package internal
 
 import (
 	"fmt"
+	"net/http"
+
 	"gitlab.com/mfcekirdek/in-memory-store/pkg/handler"
 	"gitlab.com/mfcekirdek/in-memory-store/pkg/middleware"
 	"gitlab.com/mfcekirdek/in-memory-store/pkg/repository"
 	"gitlab.com/mfcekirdek/in-memory-store/pkg/service"
 	"gitlab.com/mfcekirdek/in-memory-store/pkg/utils"
-	"net/http"
 
 	"gitlab.com/mfcekirdek/in-memory-store/configs"
 )

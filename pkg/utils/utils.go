@@ -3,9 +3,10 @@ package utils
 
 import (
 	"encoding/json"
-	"gitlab.com/mfcekirdek/in-memory-store/pkg/model"
 	"log"
 	"net/http"
+
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/model"
 )
 
 // HandleError responds to the requests in error situations according to the status code.
