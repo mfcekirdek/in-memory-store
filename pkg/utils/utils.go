@@ -1,14 +1,16 @@
+// Package utils provides common functions and variables to support other packages.
 package utils
 
 import (
 	"encoding/json"
-	model2 "gitlab.com/mfcekirdek/in-memory-store/pkg/model"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/model"
 	"log"
 	"net/http"
 )
 
+// HandleError responds to the requests in error situations according to the status code.
 func HandleError(w http.ResponseWriter, r *http.Request, status int) {
-	var response *model2.BaseResponse
+	var response *model.BaseResponse
 	if status == http.StatusNotFound {
 		response = GenerateResponse(nil, "not found")
 	} else if status == http.StatusBadRequest {
@@ -22,6 +24,7 @@ func HandleError(w http.ResponseWriter, r *http.Request, status int) {
 	_, _ = w.Write(resp)
 }
 
+// ReturnJSONResponse responds to the requests using http.ResponseWriter
 func ReturnJSONResponse(w http.ResponseWriter, r *http.Request, result interface{}, description string) {
 	response := GenerateResponse(result, description)
 	resp, err := json.Marshal(response)
@@ -34,8 +37,9 @@ func ReturnJSONResponse(w http.ResponseWriter, r *http.Request, result interface
 	_, _ = w.Write(resp)
 }
 
-func GenerateResponse(data interface{}, description string) *model2.BaseResponse {
-	response := model2.BaseResponse{
+// GenerateResponse creates a BaseResponse instance that wraps given data and description parameters and returns it.
+func GenerateResponse(data interface{}, description string) *model.BaseResponse {
+	response := model.BaseResponse{
 		Data:        data,
 		Description: description,
 	}

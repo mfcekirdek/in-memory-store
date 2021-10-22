@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// StoreHandler interface has ServeHTTP and Flush functions.
 type StoreHandler interface {
 	ServeHTTP(w http.ResponseWriter, r *http.Request)
 	Flush(w http.ResponseWriter, r *http.Request)

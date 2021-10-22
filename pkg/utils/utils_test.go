@@ -3,7 +3,7 @@
 package utils
 
 import (
-	model2 "gitlab.com/mfcekirdek/in-memory-store/pkg/model"
+	"gitlab.com/mfcekirdek/in-memory-store/pkg/model"
 	"gitlab.com/mfcekirdek/in-memory-store/test"
 	"math"
 	"net/http"
@@ -22,12 +22,12 @@ func TestGenerateResponse(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want *model2.BaseResponse
+		want *model.BaseResponse
 	}{
 		{"Generate Base Response", args{
 			data:        data,
 			description: description,
-		}, &model2.BaseResponse{
+		}, &model.BaseResponse{
 			Data:        data,
 			Description: description,
 		}},
@@ -54,14 +54,14 @@ func TestHandleError(t *testing.T) {
 	tests := []struct {
 		name           string
 		args           args
-		want           *model2.BaseResponse
+		want           *model.BaseResponse
 		wantStatusCode int
 	}{
 		{"not found", args{
 			w:      w404,
 			r:      r404,
 			status: http.StatusNotFound,
-		}, &model2.BaseResponse{
+		}, &model.BaseResponse{
 			Data:        nil,
 			Description: "not found",
 		}, http.StatusNotFound},
@@ -69,7 +69,7 @@ func TestHandleError(t *testing.T) {
 			w:      w400,
 			r:      r400,
 			status: http.StatusBadRequest,
-		}, &model2.BaseResponse{
+		}, &model.BaseResponse{
 			Data:        nil,
 			Description: "bad input parameter/body",
 		}, http.StatusBadRequest},
@@ -77,7 +77,7 @@ func TestHandleError(t *testing.T) {
 			w:      w405,
 			r:      r405,
 			status: http.StatusMethodNotAllowed,
-		}, &model2.BaseResponse{
+		}, &model.BaseResponse{
 			Data:        nil,
 			Description: "method not allowed",
 		}, http.StatusMethodNotAllowed},

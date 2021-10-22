@@ -69,7 +69,7 @@ func (s *storeService) Flush() map[string]string {
 	return s.repository.Flush()
 }
 
-// Start a goroutine to save the store to file at intervals.
+// Starts a goroutine to save the store to file at intervals.
 func backgroundTask(interval time.Duration, storageDir string, store map[string]string, task func(filepath string, store map[string]string) error) {
 	dateTicker := time.NewTicker(interval)
 	for now := range dateTicker.C {
