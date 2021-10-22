@@ -136,6 +136,11 @@ func Test_storeHandler_ServeHTTP(t *testing.T) {
 	requestBody, _ := json.Marshal(map[string]string{"value": "bar"})
 	wPut200, rPut200 := test.CreateHTTPReq(http.MethodPut, "/api/v1/store/foo", bytes.NewBuffer(requestBody))
 	wPut201, rPut201 := test.CreateHTTPReq(http.MethodPut, "/api/v1/store/foo", bytes.NewBuffer(requestBody))
+	wPut400MissingPathParam, rPut400MissingPathParam := test.CreateHTTPReq(http.MethodPut, "/api/v1/store/", bytes.NewBuffer(requestBody))
+	wPut400MissingBodyParam, rPut400MissingBodyParam := test.CreateHTTPReq(http.MethodPut, "/api/v1/store/foo", nil)
+
+	badRequestBody, _ := json.Marshal(map[string]string{"NOTvalue": "bar"})
+	wPut400BadBodyParam, rPut400BadBodyParam := test.CreateHTTPReq(http.MethodPut, "/api/v1/store/foo", bytes.NewBuffer(badRequestBody))
 
 	type fields struct {
 		service service.StoreService
@@ -193,6 +198,27 @@ func Test_storeHandler_ServeHTTP(t *testing.T) {
 			Data:        map[string]interface{}{"foo": "bar"},
 			Description: "item created",
 		}, http.StatusCreated},
+		{"[400] PUT - bad input parameter/body - missing path param", fields{service: mockService201}, args{
+			w: wPut400MissingPathParam,
+			r: rPut400MissingPathParam,
+		}, &model.BaseResponse{
+			Data:        nil,
+			Description: "bad input parameter/body",
+		}, http.StatusBadRequest},
+		{"[400] PUT - bad input parameter/body - missing body param", fields{service: mockService201}, args{
+			w: wPut400MissingBodyParam,
+			r: rPut400MissingBodyParam,
+		}, &model.BaseResponse{
+			Data:        nil,
+			Description: "bad input parameter/body",
+		}, http.StatusBadRequest},
+		{"[400] PUT - bad input parameter/body - bad body param", fields{service: mockService201}, args{
+			w: wPut400BadBodyParam,
+			r: rPut400BadBodyParam,
+		}, &model.BaseResponse{
+			Data:        nil,
+			Description: "bad input parameter/body",
+		}, http.StatusBadRequest},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

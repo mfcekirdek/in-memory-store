@@ -141,6 +141,10 @@ func TestStoreRepository_Set(t *testing.T) {
 		args   args
 		want   bool
 	}{
+		{"Nil store", fields{Store: nil}, args{
+			key:   "foo",
+			value: "newValue",
+		}, false},
 		{"Empty store", fields{Store: map[string]string{}}, args{
 			key:   "foo",
 			value: "newValue",
