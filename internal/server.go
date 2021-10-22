@@ -1,16 +1,16 @@
-package internals
+package internal
 
 import (
 	"fmt"
 	"net/http"
 
-	"gitlab.com/mfcekirdek/in-memory-store/internals/handler"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/repository"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/service"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/handler"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/repository"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/service"
 
 	"gitlab.com/mfcekirdek/in-memory-store/configs"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/middleware"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/middleware"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/utils"
 )
 
 type Server struct {

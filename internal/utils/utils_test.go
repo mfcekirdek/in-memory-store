@@ -3,7 +3,7 @@
 package utils
 
 import (
-	"gitlab.com/mfcekirdek/in-memory-store/internals/model"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/model"
 	"gitlab.com/mfcekirdek/in-memory-store/test"
 	"math"
 	"net/http"

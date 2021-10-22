@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"gitlab.com/mfcekirdek/in-memory-store/internals/repository"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/repository"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/utils"
 )
 
 const JSONFileSuffix = "-data.json"

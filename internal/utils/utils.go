@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"gitlab.com/mfcekirdek/in-memory-store/internals/model"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/model"
 )
 
 func HandleError(w http.ResponseWriter, r *http.Request, status int) {

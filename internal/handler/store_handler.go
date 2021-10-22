@@ -5,9 +5,9 @@ import (
 	"io"
 	"net/http"
 
-	"gitlab.com/mfcekirdek/in-memory-store/internals/service"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/service"
 
-	"gitlab.com/mfcekirdek/in-memory-store/internals/utils"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/utils"
 )
 
 type StoreHandler interface {

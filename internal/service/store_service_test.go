@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"github.com/golang/mock/gomock"
-	"gitlab.com/mfcekirdek/in-memory-store/internals/repository"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/repository"
 	"gitlab.com/mfcekirdek/in-memory-store/mocks"
 )
 

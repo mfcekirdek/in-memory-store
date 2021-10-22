@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"gitlab.com/mfcekirdek/in-memory-store/internals/model"
+	"gitlab.com/mfcekirdek/in-memory-store/internal/model"
 )
 
 func CreateHTTPReq(method, endpoint string, body io.Reader) (*httptest.ResponseRecorder, *http.Request) {
