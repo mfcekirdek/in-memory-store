@@ -43,9 +43,8 @@ make lint
 
 ### Run tests
 
-Mockgen framework should be installed before running tests.
-    [mockgen](https://github.com/golang/mock )
-
+Mockgen framework should be installed before running tests. Follow the instructions in this [link](https://github.com/golang/mock).
+   
 Generate mocks and run tests:
 ``` console
 make test
