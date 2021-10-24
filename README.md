@@ -44,9 +44,11 @@ make lint
 ### Run tests
 
 Mockgen framework should be installed before running tests. Follow the instructions in this [link](https://github.com/golang/mock).
-   
+
 Generate mocks and run tests:
 ``` console
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 make test
 ```
 
