@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "e750cd4a-fe7b-4594-9dca-810ec4b32c56",
+		"name": "KVStore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get /store/{key}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://167.71.39.58:30000/api/v1/store/foo",
+					"protocol": "http",
+					"host": [
+						"167",
+						"71",
+						"39",
+						"58"
+					],
+					"port": "30000",
+					"path": [
+						"api",
+						"v1",
+						"store",
+						"foo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://167.71.39.58:30000/health",
+					"protocol": "http",
+					"host": [
+						"167",
+						"71",
+						"39",
+						"58"
+					],
+					"port": "30000",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "set /store/{key}",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"value\": \"sfhfhfd\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://167.71.39.58:30000/api/v1/store/foo",
+					"protocol": "http",
+					"host": [
+						"167",
+						"71",
+						"39",
+						"58"
+					],
+					"port": "30000",
+					"path": [
+						"api",
+						"v1",
+						"store",
+						"foo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "flush /store",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://167.71.39.58:30000/api/v1/store",
+					"protocol": "http",
+					"host": [
+						"167",
+						"71",
+						"39",
+						"58"
+					],
+					"port": "30000",
+					"path": [
+						"api",
+						"v1",
+						"store"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

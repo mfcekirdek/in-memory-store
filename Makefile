@@ -8,6 +8,7 @@ run:
 
 .PHONY: test
 test:
+	sh mockgen.sh
 	go test ./... -v -coverprofile=unit_coverage.out -tags=unit
 
 .PHONY: unit-coverage-html
