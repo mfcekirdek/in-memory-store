@@ -33,11 +33,19 @@ go mod download
 ```
 
 ### Run lint checks
+
+golangci-lint should be installed before running tests.
+
+https://golangci-lint.run/usage/install/
 ``` console
 make lint
 ```
 
-### RUN tests
+### Run tests
+
+Mockgen framework should be installed before running tests.
+    [mockgen](https://github.com/golang/mock )
+
 Generate mocks and run tests:
 ``` console
 make test
