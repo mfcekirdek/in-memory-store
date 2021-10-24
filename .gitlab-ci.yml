@@ -47,6 +47,8 @@ lint-test-job:
 unit-test-job:
   stage: test
   extends: .go-cache
+  before_script:
+    - sh mockgen.sh
   script:
     - CGO_ENABLED=0 go test -v ./... -coverprofile=unit_coverage.out -tags=unit
   artifacts:
