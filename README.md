@@ -5,6 +5,10 @@
 ## Description
 A simple in memory key value store application.
 
+Migrated from Gitlab -> https://gitlab.com/mfcekirdek/in-memory-store
+
+Note: Gitlab CI/CD automation will be replaced with github actions soon.
+
 ## Table of content
 - [Api doc](api/swagger.yaml)
 - [Go doc](#go-doc)
