@@ -97,7 +97,7 @@ make run
       - tag the image with branch name (main) and pipeline id
          - image:
             - registry.gitlab.com/mfcekirdek/in-memory-store/main 
-   - Kubernetes (Created a cluster at Digital Ocean with 2 nodes [167.71.39.58, 104.248.33.151])
+   - Kubernetes (Created a cluster at Digital Ocean with 2 nodes)
      - Namespace: in-memory-store-30556712-test
      - Deployment (Pod.container.image: registry.gitlab.com/mfcekirdek/in-memory-store/main)
      - Service
@@ -105,10 +105,6 @@ make run
    - Sonarqube for code coverage assessment 
      - Pipeline fails if the coverage decreases under 80%
      - Deployed to kubernetes cluster
-     - Url: http://104.248.103.208:9000/
-     - Credentials:
-       - admin
-       - 'c_wQM?FW/ck5Sc`
    - GitLab CI/CD Pipeline for automation
 
 ## CI/CD Processes
